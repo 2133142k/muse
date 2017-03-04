@@ -1,9 +1,13 @@
-{% extends base.html %}
+{% extends "muse/base.html" %}
+
+{% load staticfiles %}
 
 {% block content %}
 <div>
-{# <img id="homeLogo" src=MUSELOGOLOCATION alt="MUSE logo" /> #}
-{# <p id="homeText"> {{INTRODUCTION TEXT}}</p> #}
+<div>
+<img id="homeLogo" src={% static "images/musesymbol.png" %} alt="MUSE logo" />
+<p id="homeText"> {{IntroductionText}}</p>
 </div>
-{# {% include PROJECTPREVIEWS with projectPreviews %} #}
+{% include "muse/projectPreviews.html" %}
+</div>
 {% endblock %}

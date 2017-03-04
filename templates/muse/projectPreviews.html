@@ -1,6 +1,9 @@
-<div class="projectPreviews">
+{% load staticfiles %}
+
+<div id="projectPreviews">
 	<!-- A list of projects -->
 	{% for projectpreview in projectPreviews %}
-		{# {% include projectPreview with projectpreview %} #}
+		{# {% include "muse/projectPreviews.html" with projectPreview %} #}
 	{% endfor %}
-<div/>
+</div>
+<script src={% static "javascript/projectPreviews.js" %} ></script>

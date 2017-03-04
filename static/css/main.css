@@ -4,8 +4,8 @@ body{
 
 div {
 	background-color: #88C8FF;
-	margin: 10px, 10px, 10px, 10px;
-	padding: 10px, 10px, 10px;
+	margin: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
 	border: 1px solid #505050;
 	overflow: hidden;
 	}
@@ -21,6 +21,8 @@ hr { border: none;
 	
 #homeLogo{
 	float: left;	
+	height: 190;
+	width: 200;
 }
 
 #headerLogo{
@@ -34,6 +36,7 @@ hr { border: none;
 #header{
 	position: relative;
 }
+
 
 
 .music_player{
