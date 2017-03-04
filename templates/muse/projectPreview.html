@@ -1,0 +1,24 @@
+{# needs ProjectName, ProjectAuthor, ProjectGenre, NumberOfComments, ProjectDescription, User, SingedIn, ProjectId #}
+<div class="projectPreview">
+	<!-- preview of project -->
+	<h3>{{ProjectName}}</h3>
+	<p>{{ProjectAuthor}}</p>
+	<p>{{ProjectGenre}}</p>
+	<p>Comments - {{NumberOfComments}}</p>
+	<p>{{ProjectDescription}}</p>
+	{% if SignedIn %}
+		<button type="button">
+		View
+		</button>
+		{% if ProjectAuthor == User %}
+			<button type="button" onclick="editProject({{ProjectId}})">
+			Edit
+			</button>
+			<button type="button" onclick="removeProject({{ProjectId}})">
+			Delete
+			</button>
+		{% endif %}
+	{% else %}
+		<a href=SIGNINPAGE>Sign In to View</a>
+	{% endif %}
+</div>
