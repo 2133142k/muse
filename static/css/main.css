@@ -7,10 +7,11 @@ div {
 	margin: 10px, 10px, 10px, 10px;
 	padding: 10px, 10px, 10px;
 	border: 1px solid #505050;
+	overflow: hidden;
 	}
 
 audio{
-	backgroud-color: #888888
+	backgroud-color: #888888;
 }
 
 hr { border: none;
@@ -26,18 +27,34 @@ hr { border: none;
 	float: left;
 }
 
+#footer{
+	position: relative;
+	height: 30px;
+}
+#header{
+	position: relative;
+}
+
+
 .music_player{
-	background-color: #FFFFFF
+	background-color: #FFFFFF;
 }
 
 .comment{
-	background-color: #70A0FF
+	background-color: #70A0FF;
 }
 .comment h3{
-	background-color: #FFFFFF
-	border: 1px solid #505050
+	background-color: #FFFFFF;
+	border: 1px solid #505050;
 }
 .comment p{
-	background-color: #FFFFFF
-	border: 1px solid #505050
+	background-color: #FFFFFF;
+	border: 1px solid #505050;
+}
+.linkSection{
+	border: none;
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	
 }

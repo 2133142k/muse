@@ -1,10 +1,12 @@
 {# needs SignedIn, USERNAME #}
 <!-- Link Section -->
-{# <a href=ABOUTPAGE>About</a> #}
-{# {% if SignedIn %} #}
-{# <a href=USERSPAGE> {{USERNAME}}'s Page</a> #}
-{# <a href=SIGNOUTPAGE>Sign Out</a> #}
-{# {% else %} #}
-{# <a href=SIGNINPAGE>Sign In</a> #}
-{# <a href=SIGNUPPAGE>Sign Up</a> #}
-{# {% endif %} #}
+<div class ="linkSection">
+<a href=ABOUTPAGE>About</a>
+{% if SignedIn %}
+<a href=USERSPAGE> {{USERNAME}}'s Page</a>
+<a href=SIGNOUTPAGE>Sign Out</a>
+{% else %}
+<a href=SIGNINPAGE>Sign In</a>
+<a href=SIGNUPPAGE>Sign Up</a>
+{% endif %}
+</div>

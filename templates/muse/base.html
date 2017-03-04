@@ -10,16 +10,16 @@
 				Musical Inspiration!
 			{% endblock %}
 		</title>
-		<link rel="icon" sizes="48x48" href={% static "images/musesmall.ico"} />
+		<link rel="icon" sizes="48x48" href={% static "images/musesmall.ico" %} />
 		<link rel="stylesheet" type="text/css" href={% static "css/main.css" %}/>
 	</head>
 	<body>
-	{# {% include HEADER %} #}
+	{% include "muse/header.html" %}
 	<hr />
 	{% block content %}
 	{% endblock %}
 	<hr />
-	{# {% include FOOTER %} #}
+	{% include "muse/footer.html" %}
 	</body>
 </html>
 
