@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_DIRS = (TEMPLATE_PATH,)
+TEMPLATE_DIRS = (TEMPLATE_DIR,)
 
 WSGI_APPLICATION = 'muse.wsgi.application'
 
