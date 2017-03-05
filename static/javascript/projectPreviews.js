@@ -2,7 +2,7 @@
 
 
 
-function insertProjectPreviews(projectPreviews){
+function insertProjectPreviews(projectPreviews, isLoggedIn, canEdit){
 
 	var numberOfPreviews = projectPreviews.projectPreviews.length;
 	var newPreviewsHTML = "";
@@ -46,12 +46,58 @@ function insertProjectPreviews(projectPreviews){
 		tempElement.appendChild(tempText);
 		previewDiv.appendChild(tempElement);
 		
+		addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit);
 		projectPreviewsBlock.appendChild(previewDiv);
 		
 		
 	}
 
 }
+
+function addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit){
+	var tempElement;
+	var tempText;
+	var divBlock = document.createElement("div");
+	divBlock.className = "projectPreviewAccessButtons loginVariable";
+	previewDiv.appendChild(divBlock);
+	if(isLoggedIn){
+		
+		//View button
+		tempElement = document.createElement("button");
+		tempText = document.createTextNode("View");
+		tempElement.appendChild(tempText);
+		//add view event!!! Should either be link to view page or load in the project and display
+		divBlock.appendChild(tempElement);
+		
+		if (canEdit){
+			
+			//Edit button
+			tempElement = document.createElement("button");
+			tempText = document.createTextNode("Edit");
+			tempElement.appendChild(tempText);
+			//add edit event!!! Should either be link to edit page or load in the project and display with edit controls
+			divBlock.appendChild(tempElement);
+			
+			//Delete button
+			tempElement = document.createElement("button");
+			tempText = document.createTextNode("Delete");
+			tempElement.appendChild(tempText);
+			//add delete event!!! Should ask if user wants to delete then request server to delete
+			divBlock.appendChild(tempElement);
+		}
+		
+	}
+	else{
+	//LoginToView button
+	tempElement = document.createElement("button");
+	tempText = document.createTextNode("Log In View");
+	tempElement.appendChild(tempText);
+	//add login event!!! Should either link to login page or ask user to login
+	divBlock.appendChild(tempElement);
+	}
+}
+
+functionChangeLoggedIn
 
 function getStartingProjectPreviews(){
 	var projectPreviews = '{"projectPreviews":[{"ProjectName":"13 bar blues",' +
@@ -66,7 +112,7 @@ function getStartingProjectPreviews(){
 
 function onPageLoad(){
 
-	insertProjectPreviews(getStartingProjectPreviews());
+	insertProjectPreviews(getStartingProjectPreviews(), false, false);
 	}
 	
 window.onload = onPageLoad(); 
