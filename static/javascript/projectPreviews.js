@@ -58,7 +58,7 @@ function addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit){
 	var tempElement;
 	var tempText;
 	var divBlock = document.createElement("div");
-	divBlock.className = "projectPreviewAccessButtons loginVariable";
+	divBlock.className = "projectPreviewAccessButtons";
 	previewDiv.appendChild(divBlock);
 	if(isLoggedIn){
 		
@@ -90,14 +90,14 @@ function addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit){
 	else{
 	//LoginToView button
 	tempElement = document.createElement("button");
-	tempText = document.createTextNode("Log In View");
+	tempText = document.createTextNode("Log In To View");
 	tempElement.appendChild(tempText);
 	//add login event!!! Should either link to login page or ask user to login
 	divBlock.appendChild(tempElement);
 	}
 }
 
-functionChangeLoggedIn
+//functionChangeLoggedIn
 
 function getStartingProjectPreviews(){
 	var projectPreviews = '{"projectPreviews":[{"ProjectName":"13 bar blues",' +
