@@ -1,0 +1,63 @@
+body{
+	color: #505050;
+	}
+
+div {
+	background-color: #88C8FF;
+	margin: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
+	border: 1px solid #505050;
+	overflow: hidden;
+	}
+
+audio{
+	backgroud-color: #888888;
+}
+
+hr { border: none;
+	height: 2px;
+	color: #505050;
+	background-color: #505050;}
+	
+#homeLogo{
+	float: left;	
+	height: 190;
+	width: 200;
+}
+
+#headerLogo{
+	float: left;
+}
+
+#footer{
+	position: relative;
+	height: 30px;
+}
+#header{
+	position: relative;
+}
+
+
+
+.music_player{
+	background-color: #FFFFFF;
+}
+
+.comment{
+	background-color: #70A0FF;
+}
+.comment h3{
+	background-color: #FFFFFF;
+	border: 1px solid #505050;
+}
+.comment p{
+	background-color: #FFFFFF;
+	border: 1px solid #505050;
+}
+.linkSection{
+	border: none;
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	
+}

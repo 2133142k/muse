@@ -1,0 +1,21 @@
+{# needs commentAuthor, musicFile, commentText, User, projectAuthor, commentId #}
+<div class="comment">
+	<!-- comment view -->
+	<h3>{{CommentAuthor}}</h3>
+	{% if MUSICFILE %}
+		<div class="music_player">
+			<audio controls preload="metadata">
+				<source src=MUSICFILE type="audio/mpeg">
+				Music is not supported by your browser
+			</audio>
+		</div>
+	{ endif %}
+	{% if commentText %}
+	<p>{{CommentText}}</p>
+	{% endif %}
+	{% if commentAuthor == User or projectAuthor == User %}
+		<button type="button" onclick="removeComment({{commentId}})">
+		Remove 
+		</button>
+	{% endif %}
+</div>

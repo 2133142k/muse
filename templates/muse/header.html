@@ -1,0 +1,8 @@
+{% load staticfiles %}
+<div id="header">
+	<!-- Header -->
+	<a href="{% url 'home' %}">
+	<img id="headerLogo" src={% static "images/headerlogo.png" %} alt="MUSE logo" />
+	</a>
+	{% include "muse/linkSection.html" %}
+</div>
