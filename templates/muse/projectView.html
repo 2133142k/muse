@@ -1,9 +1,11 @@
-{% extends muse/base.html %}
+{% extends "muse/base.html" %}
 
 {% load staticfiles %}
 
 {% block content %}
 
 projectView
+
+{% include "muse/comments.html" %}
 
 {% endblock %}

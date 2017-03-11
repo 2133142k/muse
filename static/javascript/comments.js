@@ -1,6 +1,7 @@
 function insertComment(comment){
 	var commentsDiv = document.getElementById("comments");
 	var newCommentDiv = document.createElement("div");
+	commentsDiv.appendChild(newCommentDiv);
 	
 	//<h3>{{CommentAuthor}}</h3>
 	var authorP = document.createElement("h3");
@@ -16,7 +17,7 @@ function insertComment(comment){
 			</audio>
 		</div>
 	{ endif %}*/
-	if (coment.musicfile){
+	if (comment.musicfile){
 		var musicDiv = document.createElement("div");
 		var musicAudio = document.createElement("audio");
 		var musicSrc = document.createElement("source")
@@ -47,4 +48,26 @@ function insertComment(comment){
 		</button>
 	{% endif %}*/
 	
+}
+
+function insertComments(commentsReply){
+	var comments = JSON.parse(commentsReply).comments
+	var numberOfComments = comments.length;
+	var i;
+	for (i = 0; i < numberOfComments; i = i + 1){
+		insertComment(comments[i]);
+	}
+	
+}
+
+function getComments(){
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function(){
+		if (this.readyState == 4 && this.status == 200){
+			alert(this.responseText);
+			insertComments(this.responseText);
+		}
+	}
+	xhttp.open("GET","/muse/testProjectViewPage/comments/",true);
+	xhttp.send();
 }
