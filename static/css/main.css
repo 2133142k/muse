@@ -56,6 +56,10 @@ button{ background-color: #e7e7e7;
 	width: 100px;
 }
 
+#comments{
+	background-color: #FFFFFF;
+	display: none;
+}
 
 .projectPreviewAccessButtons{
 	margin: 0;

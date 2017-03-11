@@ -1,4 +1,4 @@
-function insertComment(comment){
+function insertComment(comment, commentsDiv){
 	var commentsDiv = document.getElementById("comments");
 	var newCommentDiv = document.createElement("div");
 	commentsDiv.appendChild(newCommentDiv);
@@ -50,13 +50,42 @@ function insertComment(comment){
 	
 }
 
+
+
+function changeToHideComments(){
+	//alert("change to hide");
+	var showButton = document.getElementById("showComments");
+	showButton.innerHTML = "Hide Comments";
+	showButton.setAttribute("onclick", "javascript: hideComments();");
+}
+
+function changeToShowComments(){
+	var showButton = document.getElementById("showComments");
+	showButton.innerHTML = "Show Comments";
+	showButton.setAttribute("onclick", "javascript: showComments();");
+}
+
+function hideComments(){
+	//alert("hiding");
+	document.getElementById("comments").style.display = "none";
+	changeToShowComments();
+}
+
+function showComments(){
+	document.getElementById("comments").style.display = "block";
+	changeToHideComments();
+}
+
 function insertComments(commentsReply){
 	var comments = JSON.parse(commentsReply).comments
 	var numberOfComments = comments.length;
+	var commentsDiv = document.getElementById("comments");
 	var i;
 	for (i = 0; i < numberOfComments; i = i + 1){
-		insertComment(comments[i]);
+		insertComment(comments[i], commentsDiv);
 	}
+	commentsDiv.style.display = "block";
+	changeToHideComments();
 	
 }
 
@@ -64,7 +93,7 @@ function getComments(){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function(){
 		if (this.readyState == 4 && this.status == 200){
-			alert(this.responseText);
+			//alert(this.responseText);
 			insertComments(this.responseText);
 		}
 	}
