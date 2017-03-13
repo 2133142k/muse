@@ -49,3 +49,8 @@ def jsonComments(request):
                             ]
                 }
     return JsonResponse(response)
+
+def about(request):
+    context_dict = {"SignedIn":False}
+
+    return render ( request, "muse/about.html", context_dict)

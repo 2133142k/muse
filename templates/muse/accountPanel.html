@@ -1,11 +1,13 @@
 {# needs accountId #}
+{% load staticfiles %}
+<script src={% static "javascript/accountFunctions.js" %} ></script>
 <div id="sidebar">
 <ul>
 	<!-- Account Panel -->
-	<li><button type="button">
+	<li><button type="button" onclick="changePassword({{accountId}})">
 		Create New Project
 	</button></li>
-	<li><button type="button">
+	<li><button type="button" onclick="newProject()">
 		Change Password
 	</button></li>
 	<li><button type="button" onclick="removeAccount({{accountId}})">

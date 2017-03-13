@@ -100,6 +100,7 @@ function addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit){
 //functionChangeLoggedIn
 
 function getStartingProjectPreviews(){
+	//change to request from server
 	var projectPreviews = '{"projectPreviews":[{"ProjectName":"13 bar blues",' +
                                         '"ProjectAuthor":"UnluckyCoolCat24",' +
                                         '"ProjectGenre":"Blues",' +
@@ -110,9 +111,11 @@ function getStartingProjectPreviews(){
 	return projectPreviews;
 }
 
-function onPageLoad(){
-
-	insertProjectPreviews(getStartingProjectPreviews(), false, false);
+function onPageLoad(isLoggedIn, username, projectAuthor){
+	
+	var loggedIn = false;//get logged in data
+	var canEdit = false;//(username == projectAuthor);can edit if user owns the page
+	insertProjectPreviews(getStartingProjectPreviews(), loggedIn, canEdit);
 	}
 	
 window.onload = onPageLoad(); 

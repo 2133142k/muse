@@ -1,0 +1,28 @@
+create pages
+	homepage
+	signup
+	login
+	accountpage
+	projectpage
+	createnewprojectpage
+	about
+	
+AJAX functionality
+	dynamic loading of project previews
+	dynamic loading of comments
+	deleting projects
+	deleting comments
+	adding comments
+	searching projects
+
+CSS styling
+	homepage
+	signup
+	login
+	accountpage
+	projectpage
+	createnewprojectpage
+	about
+	
+Javascript
+	
