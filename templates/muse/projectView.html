@@ -4,7 +4,32 @@
 
 {% block content %}
 
-projectView
+<div id = "projectView">
+	<h2 class = "projectDescriptor">{{Project.ProjectName}}<h2>
+	<h3 class = "projectDescriptor">Author: {{Project.ProjectAuthor}}<h3>
+	<p class = "projectDescriptor">Genre: {{Project.ProjectGenre}}<p>
+	<p class = "projectDescriptor">{{Project.NumberOfComments}} comments<p>
+	<p class = "projectDescriptor">{{Project.ProjectDescription}}<p>
+		{% if Project.AudioFile %}
+			<div class="music_player">
+			<audio controls preload="metadata">
+				<source src={{Project.AudioFile}} type="audio/mpeg">
+				Music is not supported by your browser
+			</audio>
+			</div>
+		{% endif %}
+		{% if Project.ExtraFiles %}
+			<div class = "otherFiles">
+			{% for file in Project.ExtraFiles %}
+			<div class = "otherFile">
+			<h4 class = "fileTypeLabel">{{file.filetype}}</h4>
+			<a href = {{file.location}}{{file.filename}} class = "otherFileLink">{{file.filename}}</a>
+			</div>
+			{% endfor %}
+			</div>
+		{% endif %}
+</div>
+
 
 {% include "muse/comments.html" %}
 

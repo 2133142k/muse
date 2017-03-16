@@ -67,6 +67,38 @@ button{ background-color: #e7e7e7;
 	border: 0;
 }
 
+.projectDescriptor{
+	background-color: #FFFFFF;
+	padding: 5px 10px 5px 10px;
+	border-radius: 20px;
+	border: 1px solid #505050;
+	margin: 5px 10px 5px 10px;
+	width: auto;
+	display: inline-block;
+}
+
+.otherFiles{
+	background-color: #FFFFFF;
+	padding: 5px 5px 5px 5px;
+	display: inline-block;
+}
+
+.fileTypeLabel{
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 10px;
+}
+
+.otherFileLink{
+	display: inline-block;
+	background-color: #FFFFFF;
+	padding: 5px 5px 5px 5px;
+	margin: 5px 10px 5px 10px;
+	border-radius: 20px;
+	border: 1px solid #505050;
+}
+.otherFile{
+	text-align:center;
+}
 .music_player{
 	background-color: #FFFFFF;
 }
