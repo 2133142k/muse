@@ -31,13 +31,22 @@ def musicProject(request,musicproject_name_url,user_name_url):
         context_dict['musicProject'] = musicProject
         context_dict['user'] = user
         if request.method=='POST':
-            comment_form = CoomentForm(request.POST)
-            if comment_form.is_valid():
-                com =comment_form.save(coomit=False)
-                com.user=user_name
-                com.project=project_name
-                com.save()
-                return HttpResponse('projects/user/musicProject.html')
+            if 'save' in request.POST:
+                comment_form = CoomentForm(request.POST)
+                if comment_form.is_valid():
+                    com =comment_form.save(comit=False)
+                    com.user=user_name
+                    com.project=project_name
+                    com.save()
+                    return HttpResponse('projects/user/musicProject.html')
+                else:
+                    print form.errors
+            elif 'delete' in request.POST:
+                if request.user.is_authenticated():
+                    if request.user.username== user_name:
+                        MusicProject.objects.filter(name=project_name).delete()
+        else:
+            form = CommentForm()
     except MusicProject.DoesNotExist:
         context_dict['comments'] = none
         context_dict['musicProject'] = none
@@ -58,6 +67,10 @@ def createProject(request, user_name_url):
     else:
         form = MusicProjectForm()
     return render_to_response('projects/newproject.html',context)
+
+def changePassword(request, username):
+
+
 
 def login(request):
     context = RequestContext(request)
@@ -92,7 +105,7 @@ def register(request):
 
             profile.save
 
-            registered=true
+            registered=True
         else:
             print(user_form.errors, profile_form.errors)
     else:
