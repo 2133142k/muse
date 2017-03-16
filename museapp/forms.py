@@ -5,10 +5,10 @@ from mus.models import MusicProject, UserProfile, Comment
 
 
 class CommentForm(forms.modelForm):
-	text = models.CharField(max_length=500,help_text="Comment")
+	text = models.CharField(widget=forms.Textarea,help_text="Comment")
 	user = models.ForeignKey(User)
 	project = models.ForeignKey(MusicProject)
-	date = models.DateTimeField()
+	date = models.DateTimeField(auto_now_add=true,blank=true)
 	audio = models.FileField()
 
 	class Meta:
@@ -21,7 +21,7 @@ class ProjectForm(forms.modelForm):
 	LyricAndChord = models.FileField(help_text="Please input the file to upload.",required=False)
 	ClassicalNotation = models.FileField(help_text="Please input the file to upload.",required=False)
 	PageDescription = models.CharField(max_length=500,help_text="Please enter the description for the project")
-	date = models.DateTimeField.auto_now_add(widget=forms.Hiddentinput())
+	date = models.DateTimeField(auto_now_add=true,blank=true)
 	genre = models.CharField(max_length=128,help_text="Please input the genre.")
 	name = models.CharField(max_length=128, help_text="Please input naem of the project.",unique=True)
 
