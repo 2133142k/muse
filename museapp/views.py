@@ -33,7 +33,10 @@ def musicProject(request,musicproject_name_url,user_name_url):
         if request.method=='POST':
             comment_form = CoomentForm(request.POST)
             if comment_form.is_valid():
-                comment_form.save()
+                com =comment_form.save(coomit=False)
+                com.user=user_name
+                com.project=project_name
+                com.save()
                 return HttpResponse('projects/user/musicProject.html')
     except MusicProject.DoesNotExist:
         context_dict['comments'] = none

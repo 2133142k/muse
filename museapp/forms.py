@@ -6,8 +6,6 @@ from mus.models import MusicProject, UserProfile, Comment
 
 class CommentForm(forms.modelForm):
 	text = models.CharField(widget=forms.Textarea,help_text="Comment")
-	user = models.ForeignKey(User)
-	project = models.ForeignKey(MusicProject)
 	date = models.DateTimeField(auto_now_add=true,blank=true)
 	audio = models.FileField()
 
