@@ -55,6 +55,16 @@ def about(request):
     context_dict = {"SignedIn":False}
 
     return render ( request, "muse/about.html", context_dict)
+
+def login(request):
+    context_dict = {"SignedIn":False}
+
+    return render ( request, "muse/login.html", context_dict)
+	
+def register(request):
+    context_dict = {"SignedIn":False}
+
+    return render ( request, "muse/register.html", context_dict)
 	
 def getProjectPreviews(request):
     response = getUserInfo(request)
