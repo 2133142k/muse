@@ -33,7 +33,7 @@ class MusicProject(models.Model):
 		self.slug = slugify(self.name)
         if not self.id:
             self.date = timezone.now()
-		super(MusicProject, self).save(*args, **kwargs)
+        super(MusicProject, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name_plural = 'MusicProject'
@@ -47,6 +47,7 @@ class Comment(models.Model):
 	project = models.ForeignKey(MusicProject)
 	date = models.DateTimeField()
 	audio = models.FileField()
+    id = models.IntegerField()
 
 	def __str__(self):
 		return self.user
