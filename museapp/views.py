@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from mus.models import MusicProject, Comment, UserProfile
-from mus.forms import CoomentForm, MusicProjectForm, UserForm, UserProfileForm, UploadFileForm
+from mus.forms import CommentForm, MusicProjectForm, UserForm, UserProfileForm
 
 def about(request):
     return HttpResponse("This webapp is ment for musicians to share their work and to get from other user on how to improve.")
@@ -12,12 +12,12 @@ def home(request):
         context_dict = {'projects': project_list}
     else:
         context_dict = {'projects':none}
-    return render(request, 'home/$', context=context_dict)
+    return render(request, r'^$', context=context_dict)
 
 def myAccount(request):
     project_list = MusicProject.objects.get(user_iexact=request.user.username)
     context_dict = {'projects':project_list}
-    return render(request,'login/myaccount/$',context=context_dict)
+    return render(request,r'^login/myaccount/$',context=context_dict)
 
 def musicProject(request,musicproject_name_url,user_name_url):
     context = RequestContext(request)
@@ -37,7 +37,7 @@ def musicProject(request,musicproject_name_url,user_name_url):
                     com.user=user_name
                     com.project=project_name
                     com.save()
-                    return HttpResponse('projects/?P<username>[\w\-]+/musicProject/$')
+                    return HttpResponse(r'^projects/?P<username>[\w\-]+/musicProject/$')
                 else:
                     print form.errors
         elif request.method=='DELETE':
@@ -50,7 +50,7 @@ def musicProject(request,musicproject_name_url,user_name_url):
         context_dict['comments'] = none
         context_dict['musicProject'] = none
         context_dict['user']=none
-    return render(request, 'projects/?P<username>[\w\-]+/musicProject/$', context_dict)
+    return render(request, r'^projects/?P<username>[\w\-]+/musicProject/$', context_dict)
 
 def getComments(request, project_name_url):
     project_name = decode_url(project_name_url)
@@ -80,12 +80,12 @@ def createProject(request, username_slug):
         if project_form.is_valid():
             project_form.save(commit=True)
 
-            return HttpResponse('/login/myaccount/$')
+            return HttpResponse(r'^login/myaccount/$')
         else:
             print project_form.errors
     else:
         form = MusicProjectForm()
-    return render('projects/newproject/$',context)
+    return render(r'^projects/newproject/$',context)
 
 def changePassword(request, username):
 
@@ -102,7 +102,7 @@ def login(request):
             return HttpResponse('/muse/home.html')
         else:
             print("Invalid username or password")
-            return render_to_response('muse/login.html',context_dict,context)
+            return render_to_response(r'^muse/login.html',context_dict,context)
 
 def register(request):
     registered = False
@@ -130,7 +130,7 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-    return render(request,'/signup.html',{'user_form':user_form,'profile_form':profile_form,'registered':registered})
+    return render(request,r'^signup.html',{'user_form':user_form,'profile_form':profile_form,'registered':registered})
 
 
 
