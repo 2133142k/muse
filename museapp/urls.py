@@ -14,4 +14,6 @@ urlpatterns = [url(r'^$', views.homePage, name="home"),
                url(r'^projects/(?P<project_name_slug>[\w\-]+)/$', views.project, name ="projectPage"),
                 #url(r'^projects/(?P<project_name_slug>[\w\-]+)/comments/$', views.comments, name ="comments"),
                url(r'about/$', views.about, name="about"),
+			   url(r'login/$', views.login, name="login"),
+			   url(r'register/$', views.register, name="register"),
                ]
