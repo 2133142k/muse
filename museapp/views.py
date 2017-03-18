@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from museapp.forms import UserForm, UserProfileForm
+from museapp.models import MusicProject, Comment
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def testBase(request):
@@ -57,8 +59,31 @@ def about(request):
 
     return render ( request, "muse/about.html", context_dict)
 
-def login(request):
+def user_login(request):
     context_dict = {"SignedIn":False}
+
+    if request.method == "POST":
+        #get credentials
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        #check credentials
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                #user credentials correct and user is active log them in
+                login(request, user)
+
+                #redirect to users page
+                user_id = user.id
+                return HttpResponseRedirect("/muse/users/%d/" %user_id)
+            else:
+                #user disabled
+                return HttpResponse("Your account is disabled")
+        else:
+            return HttpResponse("Invalid username or password")
+
 
     return render ( request, "muse/login.html", context_dict)
 	
@@ -67,24 +92,24 @@ def register(request):
 	
 	if request.method == 'POST':
 		user_form = UserForm(data=request.POST)
-		profile_form = UserProfileForm(data=request.POST)
+		#profile_form = UserProfileForm(data=request.POST)
 		
-		if user_form.is_valid() and profile_form.is_valid():
+		if user_form.is_valid(): # and profile_form.is_valid():
 			user = user_form.save()
 			user.set_password(user.password)
 			user.save()
-			profile = profile_form.save(commot=False)
-			profile.user = user
-			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
-			profile.save()
+			#profile = profile_form.save(commit=False)
+			#profile.user = user
+			#if 'picture' in request.FILES:
+			#	profile.picture = request.FILES['picture']
+			#profile.save()
 			registerd = True
 		else:
-			print(user_form.errors, profile_form.errors)
+			print(user_form.errors)#, profile_form.errors)
 	else:
-		user_form = UserForm()
-		profile_form = UserProfileForm()
-	return render ( request, 'muse/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+	    user_form = UserForm()
+	    #profile_form = UserProfileForm()
+            return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
 	
 def getProjectPreviews(request):
     response = getUserInfo(request)
@@ -143,29 +168,29 @@ def project(request, project_name_slug):
         #not a valid request
         return HttpResponseBadRequest()
 
-def userPage(request):
+def userPage(request, user_id):
     context_dict = getUserInfo(request)
-    if (request.method == "GET"):
-        #get an accountPage
-        #check username_slug == page's username
-        return render(request, "muse/accountPage.html", context_dict)
+    return render(request, "muse/accountPage.html", context_dict)
     
-    elif (request.method == "POST"):
-        #not yet implemented
-        #new user
-        return HttpResponseBadRequest()
-
-    elif (request.method == "DELETE"):
-        #not yet implemented
-        #delete account
-        return HttpResponseBadRequest()
-
-    elif (request.method == "PUT"):
-        #not yet implemented
-        #change password
-        return HttpResponseBadRequest()
+##    if (request.method == "GET"):
+##        #get an accountPage
+##        #check username_slug == page's username
+##        return render(request, "muse/accountPage.html", context_dict)
+##
+##    elif (request.method == "DELETE"):
+##        #not yet implemented
+##        #delete account
+##        return HttpResponseBadRequest()
+##
+##    elif (request.method == "PUT"):
+##        #not yet implemented
+##        #change password
+##        return HttpResponseBadRequest()
 
 def getUserInfo(request):
-    return {"SignedIn":True, "Username":"Alice"}
+    signedIn = request.user.is_authenticated
+    username = request.user.username
+    userid = request.user.id
+    return {"SignedIn":signedIn, "Username":username, "UserId":userid}
     
         

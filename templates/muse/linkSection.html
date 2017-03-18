@@ -3,9 +3,9 @@
 <!-- Link Section -->
 <div class ="linkSection">
 <a href="{% url 'about' %}">About</a>
-{% if SignedIn %}
-<a href=USERSPAGE> {{USERNAME}}'s Page</a>
-<a href=SIGNOUTPAGE>Sign Out</a>
+{% if user.is_authenticated %}
+<a href=USERSPAGE> {{user.username}}'s Page</a>
+<a href=home>Sign Out</a>
 {% else %}
 <a href=login>Sign In</a>
 <a href=register>Sign Up</a>
