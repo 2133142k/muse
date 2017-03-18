@@ -22,5 +22,6 @@ function changePassword(accountId){
 }
 
 function newProject(){
-	window.alert("Link to new project form");
+	//window.alert("Link to new project form");
+	window.location.assign("/muse/new_project/")
 }

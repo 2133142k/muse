@@ -15,18 +15,21 @@ class CommentForm(forms.ModelForm):
 		fields = ('text','audio')
 
 class ProjectForm(forms.ModelForm):
-	MusicFile = forms.FileField(help_text="Please input the file to upload.")
+        name = forms.CharField(max_length=128, help_text="Please input name of the project.")
+        genre = forms.CharField(max_length=128,help_text="Please input the genre.")
+        PageDescription = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Please enter the description for the project")
+	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False)
 	tab = forms.FileField(help_text="Please input the file to upload.",required=False)
 	LyricAndChord = forms.FileField(help_text="Please input the file to upload.",required=False)
 	ClassicalNotation = forms.FileField(help_text="Please input the file to upload.",required=False)
-	PageDescription = forms.CharField(max_length=500,help_text="Please enter the description for the project")
+	
 	#date = forms.DateTimeField.auto_now_add(widget=forms.Hiddentinput())
-	genre = forms.CharField(max_length=128,help_text="Please input the genre.")
-	name = forms.CharField(max_length=128, help_text="Please input naem of the project.")
+	
+	
 
 	class Meta:
 		model = MusicProject
-		fields =('MusicFile','tab','PageDescription','LyricAndChord','ClassicalNotation','PageDescription','genre','name')
+		fields =('name','genre','PageDescription','MusicFile','tab','LyricAndChord','ClassicalNotation')
 
 class UserForm(forms.ModelForm):
 	username = forms.CharField(max_length=128,help_text="Please enter your username.")

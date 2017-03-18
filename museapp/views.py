@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
-from museapp.forms import UserForm, UserProfileForm
+from museapp.forms import UserForm, UserProfileForm, ProjectForm
 from museapp.models import MusicProject, Comment
 from django.contrib.auth import authenticate, login, logout
 
@@ -86,6 +86,10 @@ def user_login(request):
 
 
     return render ( request, "muse/login.html", context_dict)
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect("/muse/")
 	
 def register(request):
 	registered = False
@@ -114,25 +118,32 @@ def register(request):
 def getProjectPreviews(request):
     response = getUserInfo(request)
     number = request.GET.get('number')
+
+
+
+    project_list = MusicProject.objects
+    if (request.GET.get('owned') == 'true'):
+        #get only owner's projects
+        project_list = project_list.filter(user__exact=request.user)
+    else:
+        #return random projects
+        pass #randomise
+
+        #workout number of projects to rerturn
     if (not number.isdigit()):
         number = 5
     else:
         number = int(number)
-    if (request.GET.get('owned') == 'true'):
-        #get only owner's projects
-        #reduce to number responses
-        pass
-    else:
-        #return number random projects
-        pass
+    if number < len(project_list):
+        project_list = project_list[:number]
+    
 
 
     #return projects JSON
-    response["ProjectPreviews"] = [{"ProjectName":"13 bar blues",
-                               "ProjectAuthor":"UnluckyCoolCat24",
-                               "ProjectGenre":"Blues",
-                               "NumberOfComments":2,
-                               "ProjectDescription":"Like the 12 bar blues but with an added bar!"}]
+    response["ProjectPreviews"] = list(project_list.values())#add wanted fields
+
+    print response
+    
     return JsonResponse(response)
 
 def project(request, project_name_slug):
@@ -149,11 +160,6 @@ def project(request, project_name_slug):
 
         return render ( request, "muse/projectView.html", context_dict)
 
-    elif (request.method == "POST"):
-        #not yet implemented
-        #new project
-        return HttpResponseNotModified()
-
     elif (request.method == "DELETE"):
         #not yet implemented
         #delete project
@@ -167,6 +173,20 @@ def project(request, project_name_slug):
     else:
         #not a valid request
         return HttpResponseBadRequest()
+
+def createProject(request):
+
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return httpResponseRedirect("/muse/users/%d/" %request.user.id)
+        else:
+            print form.errors
+    else:
+        form = ProjectForm()
+
+    return render (request, "muse/newProject.html", {"projectForm":form})
 
 def userPage(request, user_id):
     context_dict = getUserInfo(request)
@@ -188,7 +208,9 @@ def userPage(request, user_id):
 ##        return HttpResponseBadRequest()
 
 def getUserInfo(request):
-    signedIn = request.user.is_authenticated
+
+    signedIn = bool(request.user.is_authenticated)
+
     username = request.user.username
     userid = request.user.id
     return {"SignedIn":signedIn, "Username":username, "UserId":userid}

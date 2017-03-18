@@ -4,7 +4,7 @@
 
 function insertProjectPreviews(inputDict){
 
-	var isLoggedIn = inputDict.LoggedIn;
+	var isLoggedIn = inputDict.SignedIn;
 	var projectPreviews = inputDict.ProjectPreviews;
 	var numberOfPreviews = projectPreviews.length;
 	var projectPreviewsBlock = document.getElementById("projectPreviews");

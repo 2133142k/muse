@@ -1,0 +1,17 @@
+{% extends "muse/base.html" %}
+
+{% block content %}
+{% include "muse/accountPanel.html" %}
+
+	<h1>Create your new project</h1>
+	<div>
+		<form id="project_form" method="post" action="{% url 'newProject' %}" enctype="multipart/form-data">
+		
+		{% csrf_token %}
+		<table>
+		{{ projectForm.as_table}}
+		</table>
+		<input type="submit" name="Create" value="Create"/>
+		</form>
+	</div>
+{% endblock %}
