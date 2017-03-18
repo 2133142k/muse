@@ -4,6 +4,11 @@
 <div id="sidebar">
 <ul>
 	<!-- Account Panel -->
+	<li><a href="{% url 'home' %}">Home</a></li>
+	<li><a href="{% url 'about' %}">About</a></li>
+	{% if user.is_authenticated %}
+	<li><a href=USERSPAGE> {{user.username}}'s Page</a></li>
+	<li><a href="{% url 'logout' %}">Sign Out</a></li>
 	<li><button type="button" onclick="newProject()">
 		Create New Project
 	</button></li>
@@ -13,5 +18,9 @@
 	<li><button type="button" onclick="removeAccount({{accountId}})">
 		Delete Account
 	</button></li>
+	{% else %}
+	<li><a href="{% url 'login' %}">Sign In</a></li>
+	<li><a href="{% url 'register' %}">Sign Up</a></li>
+{% endif %}
 </ul>
 </div>

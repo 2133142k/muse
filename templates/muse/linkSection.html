@@ -2,6 +2,7 @@
 {# needs SignedIn, USERNAME #}
 <!-- Link Section -->
 <div class ="linkSection">
+<a href="{% url 'home' %}">Home</a>
 <a href="{% url 'about' %}">About</a>
 {% if user.is_authenticated %}
 <a href=USERSPAGE> {{user.username}}'s Page</a>

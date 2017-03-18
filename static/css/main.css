@@ -12,7 +12,7 @@ div {
 	}
 
 audio{
-	backgroud-color: #888888;
+	background-color: #888888;
 }
 
 hr { border: none;
@@ -25,9 +25,25 @@ ul { list-style-type: none;
 	padding: 0;
 }
 
-button{ background-color: #e7e7e7;
-	color: #505050;
-	border-radius: 10px;}
+li {
+	width: 100%;
+}
+	
+input[type=submit], button, li a{
+	background-color:#FFFFFF;
+	padding: 5px 5px 5px 5px;
+	border: 1px solid #505050;
+	border-radius:10px;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center; 
+	text-decoration: none;
+	color: #000000;
+}
+
+input[type=submit]:hover, button:hover, li a:hover{
+	background-color:#88C8FF;
+}
 	
 form table{
 	border-spacing: 5px;
@@ -44,7 +60,6 @@ form table tbody tr{
 form table tbody tr th{
 	vertical-align: text-top;
 	border: 1px solid #505050;
-	font-size: 115%;
 	background-color: #FFFFFF;
 	border-radius: 10px;
 	padding: 5px 5px 5px 5px;
@@ -56,6 +71,10 @@ form table tbody tr td{
 	border-radius: 10px;
 	padding: 5px 5px 5px 5px;}
 	
+form input[type=submit]{
+	padding: 5px 5px 5px 5px;
+	width: 100%;
+}
 #homeLogo{
 	float: left;	
 	height: 190;
@@ -79,8 +98,10 @@ form table tbody tr td{
 	float: left;
 }
 
-#sidebar button{
-	width: 100px;
+#sidebar button, #sidebar a{
+	min-width: 150px;
+	width: 100%;
+	padding: 5px 0px 5px 0px;
 }
 
 #comments{
@@ -140,14 +161,4 @@ form table tbody tr td{
 .comment p{
 	background-color: #FFFFFF;
 	border: 1px solid #505050;
-}
-.linkSection{
-	border: none;
-	position: absolute;
-	margin: 0;
-	padding: 0;
-	bottom: 20px;
-	right: 10px;
-	background-color: transparent;
-	
 }
