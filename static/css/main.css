@@ -18,7 +18,8 @@ audio{
 hr { border: none;
 	height: 2px;
 	color: #505050;
-	background-color: #505050;}
+	background-color: #505050;
+	clear: left;}
 	
 ul { list-style-type: none;
 	margin: 0;
@@ -27,6 +28,7 @@ ul { list-style-type: none;
 
 li {
 	width: 100%;
+	
 }
 	
 input[type=submit], button, li a{
@@ -109,6 +111,15 @@ form input[type=submit]{
 	display: none;
 }
 
+#contentBlock{
+	background-color: transparent;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	border: none;
+	overflow: hidden;
+	
+}
+
 .projectPreviewAccessButtons{
 	margin: 0;
 	padding: 0;
@@ -123,6 +134,10 @@ form input[type=submit]{
 	margin: 5px 10px 5px 10px;
 	width: auto;
 	display: inline-block;
+}
+
+.projectNameLink{
+	font-size: 150%;
 }
 
 .otherFiles{
@@ -149,6 +164,8 @@ form input[type=submit]{
 }
 .music_player{
 	background-color: #FFFFFF;
+	width: 200px;
+	display: inline-block;
 }
 
 .comment{

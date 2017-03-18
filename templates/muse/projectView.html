@@ -3,17 +3,18 @@
 {% load staticfiles %}
 
 {% block content %}
-
-<div id = "projectView">
-	<h2 class = "projectDescriptor">{{Project.ProjectName}}<h2>
-	<h3 class = "projectDescriptor">Author: {{Project.ProjectAuthor}}<h3>
-	<p class = "projectDescriptor">Genre: {{Project.ProjectGenre}}<p>
-	<p class = "projectDescriptor">{{Project.NumberOfComments}} comments<p>
-	<p class = "projectDescriptor">{{Project.ProjectDescription}}<p>
-		{% if Project.AudioFile %}
+<ul>
+<li><div id = "projectView">
+<ul>
+	<li><a href = "{% url 'projectPage' project_name_slug=Project.slug %}" class = "projectDescriptor projectNameLink">{{Project.name}}</a></li>
+	<li><a href = "{% url 'userPage' user_id=Project.user.id %}"class = "projectDescriptor">Author: {{Project.user.username}}</a></li>
+	<li><p class = "projectDescriptor">Genre: {{Project.genre}}</p></li>
+	<li><p class = "projectDescriptor">{{Project.PageDescription}}</p></li>
+</ul>
+		{% if Project.musicFile %}
 			<div class="music_player">
 			<audio controls preload="metadata">
-				<source src={{Project.AudioFile}} type="audio/mpeg">
+				<source src={{Project.musicFile.url}} type="audio/mpeg">
 				Music is not supported by your browser
 			</audio>
 			</div>
@@ -28,9 +29,10 @@
 			{% endfor %}
 			</div>
 		{% endif %}
-</div>
+</div></li>
 
 
-{% include "muse/comments.html" %}
+<li>{% include "muse/comments.html" %}</li>
+</ul>
 
 {% endblock %}

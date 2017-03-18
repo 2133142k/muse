@@ -1,5 +1,8 @@
 {% extends "muse/base.html" %}
 
+{% block title_block %}{{ owner }}{% endblock %}
+
 {% block content %}
+<h1>{{ owner }}'s Projects</h1>
 {% include "muse/projectPreviews.html" %}
 {% endblock %}

@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
 from museapp.forms import UserForm, UserProfileForm, ProjectForm
 from museapp.models import MusicProject, Comment
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 # Create your views here.
 def testBase(request):
@@ -122,9 +123,10 @@ def getProjectPreviews(request):
 
 
     project_list = MusicProject.objects
-    if (request.GET.get('owned') == 'true'):
+    user_id = int(request.GET.get('user_id', default = False))
+    if (request.GET.get('user_id', default = False) != False):
         #get only owner's projects
-        project_list = project_list.filter(user__exact=request.user)
+        project_list = project_list.filter(user__id__exact=user_id)
     else:
         #return random projects
         pass #randomise
@@ -136,11 +138,23 @@ def getProjectPreviews(request):
         number = int(number)
     if number < len(project_list):
         project_list = project_list[:number]
+
+    projects = []
+    for project in project_list.iterator():
+        next_project = {"name":project.name,
+                        "slug":project.slug,
+                        "genre":project.genre,
+                        "PageDescription":project.PageDescription}        
+        number_of_comments = Comment.objects.filter(project__slug=project.slug).count()
+        next_project["NumberOfComments"] = number_of_comments
+        next_project["Author"] = {"name": project.user.username,
+                                  "id": project.user.id}
+        projects.append(next_project)
     
 
 
     #return projects JSON
-    response["ProjectPreviews"] = list(project_list.values())#add wanted fields
+    response["ProjectPreviews"] = projects
 
     print response
     
@@ -150,13 +164,19 @@ def project(request, project_name_slug):
     context_dict = getUserInfo(request)
     if (request.method == "GET"):
         #get a project
-        context_dict["Project"] = {"ProjectName":"13 bar blues",
-                               "ProjectAuthor":"UnluckyCoolCat24",
-                               "ProjectGenre":"Blues",
-                               "NumberOfComments":2,
-                               "ProjectDescription":"Like the 12 bar blues but with an added bar!",
-                               "AudioFile":"13-bar-blues.mp3",
-                               "ExtraFiles":[{"filename":"13-bar-blues-sheetmusic.pdf","filetype":"Sheetmusic"}]}
+        try:
+            musicProject = MusicProject.objects.get(slug=project_name_slug)
+        except:
+            #project doesn't exist
+            raise Http404("User does not exist")
+        context_dict["Project"] = musicProject
+##        {"ProjectName":"13 bar blues",
+##                               "ProjectAuthor":"UnluckyCoolCat24",
+##                               "ProjectGenre":"Blues",
+##                               "NumberOfComments":2,
+##                               "ProjectDescription":"Like the 12 bar blues but with an added bar!",
+##                               "AudioFile":"13-bar-blues.mp3",
+##                               "ExtraFiles":[{"filename":"13-bar-blues-sheetmusic.pdf","filetype":"Sheetmusic"}]}
 
         return render ( request, "muse/projectView.html", context_dict)
 
@@ -190,6 +210,12 @@ def createProject(request):
 
 def userPage(request, user_id):
     context_dict = getUserInfo(request)
+    try:
+        pageOwner = User.objects.get(id__exact=int(user_id)).username
+        context_dict["owner"] = pageOwner
+    except:
+        #user doesn't exist 404 error
+        raise Http404("User does not exist")
     return render(request, "muse/accountPage.html", context_dict)
     
 ##    if (request.method == "GET"):
