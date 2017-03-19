@@ -1,9 +1,9 @@
 <!-- comment -->
 <div class = "commentDiv">
 <ul>
-	<li><h2>{{comment.user.username}}</h2></li>
+	<li><a href = "{% url 'userPage' user_id=comment.user.id %}" class = "projectDescriptor projectNameLink">{{comment.user.username}}</a></li>
 	{% if comment.text %}
-		<li><p>{{comment.text}}</p></li>
+		<li><p class = "projectDescriptor">{{comment.text}}</p></li>
 	{% endif %}
 	{% if comment.audio %}
 		<li><div class="music_player">

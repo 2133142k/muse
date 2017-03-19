@@ -1,5 +1,5 @@
 function insertComment(comment, commentsDiv){
-	alert(JSON.stringify(comment));
+	//alert(JSON.stringify(comment));
 	//var commentsDiv = document.getElementById("comments");
 	//var newCommentDiv = document.createElement("div");
 	commentsDiv.innerHTML = commentsDiv.innerHTML + comment
@@ -74,11 +74,7 @@ function deleteComment(commentId){
 	xhttp.onreadystatechange = function(){
 		if (this.readyState == 4 && this.status == 200){
 			var commentsDiv = document.getElementById("comments");
-			
-			//remove all current comments and reload
-			while (commentsDiv.firstChild){
-				commentsDiv.removeChild(commentsDiv.firstChild);
-			}
+
 			getComments();
 			
 		}
@@ -107,7 +103,7 @@ function hideComments(){
 }
 
 function showComments(){
-	document.getElementById("comments").style.display = "block";
+	getComments();
 	changeToHideComments();
 }
 
@@ -131,7 +127,12 @@ function insertComments(commentsReply){
 	//alert (comments.length);
 	//alert (numberOfComments);
 	var commentsDiv = document.getElementById("comments");
-	//check if there are comments
+	
+	//remove all current comments
+	while (commentsDiv.firstChild){
+		commentsDiv.removeChild(commentsDiv.firstChild);
+	}
+	//check if there are new comments
 	if (numberOfComments > 0){
 		var i;
 		for (i = 0; i < numberOfComments; i = i + 1){
@@ -150,10 +151,11 @@ function getComments(){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function(){
 		if (this.readyState == 4 && this.status == 200){
-			alert(this.responseText);
+			//alert(this.responseText);
 			insertComments(this.responseText);
 		}
 	}
 	xhttp.open("GET","comments/",true);
 	xhttp.send();
 }
+window.onload = getComments();

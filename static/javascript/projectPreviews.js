@@ -188,6 +188,11 @@ function getStartingProjectPreviews(number){
 			insertProjectPreviews(JSON.parse(this.responseText));
 		}
 	}
+	// get user_id
+	var currenturl = window.location.pathname;
+	
+	
+	
 	xhttp.open("GET","/muse/projects/?user_id=5&number=" + number,true);
 	xhttp.send();
 }
