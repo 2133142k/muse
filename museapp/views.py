@@ -209,8 +209,10 @@ def createProject(request):
     if request.method == "POST":
         form = ProjectForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
-            return httpResponseRedirect("/muse/users/%d/" %request.user.id)
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            return HttpResponseRedirect("/muse/users/%d/" %request.user.id)
         else:
             print form.errors
     else:

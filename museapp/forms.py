@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from museapp.models import MusicProject, UserProfile, Comment
+from museapp.models import MusicProject, UserProfile, Comment, ExtraFile
 
 
 
@@ -19,9 +19,9 @@ class ProjectForm(forms.ModelForm):
         genre = forms.CharField(max_length=128,help_text="Please input the genre.")
         PageDescription = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Please enter the description for the project")
 	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False)
-	tab = forms.FileField(help_text="Please input the file to upload.",required=False)
-	LyricAndChord = forms.FileField(help_text="Please input the file to upload.",required=False)
-	ClassicalNotation = forms.FileField(help_text="Please input the file to upload.",required=False)
+	#tab = forms.FileField(help_text="Please input the file to upload.",required=False)
+	#LyricAndChord = forms.FileField(help_text="Please input the file to upload.",required=False)
+	#ClassicalNotation = forms.FileField(help_text="Please input the file to upload.",required=False)
 	
 	#date = forms.DateTimeField.auto_now_add(widget=forms.Hiddentinput())
 	
@@ -29,7 +29,7 @@ class ProjectForm(forms.ModelForm):
 
 	class Meta:
 		model = MusicProject
-		fields =('name','genre','PageDescription','MusicFile','tab','LyricAndChord','ClassicalNotation')
+		fields =('name','genre','PageDescription','MusicFile')#,'tab','LyricAndChord','ClassicalNotation')
 
 class UserForm(forms.ModelForm):
 	username = forms.CharField(max_length=128,help_text="Please enter your username.")
@@ -46,3 +46,12 @@ class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields=['website', 'picture']
+
+class ExtraFileForm(forms.ModelForm):
+        file_type = forms.ChoiceField(choices = ExtraFile.FILE_TYPE_CHOICES)
+        extra = forms.FileField(help_text="Please input the file to upload.", required=False)
+
+        class Meta:
+                model = ExtraFile
+                fields= ["file_type", "extra"]
+        

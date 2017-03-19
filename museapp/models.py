@@ -21,9 +21,9 @@ class UserProfile(models.Model):
 
 class MusicProject(models.Model):
 	musicFile = models.FileField()
-	tab = models.FileField()
-	LyricAndChord = models.FileField()
-	ClassicalNotation = models.FileField()
+	#tab = models.FileField()
+	#LyricAndChord = models.FileField()
+	#ClassicalNotation = models.FileField()
 	PageDescription = models.CharField(max_length=500)
 	date = models.DateTimeField(auto_now_add=True)
 	genre = models.CharField(max_length=128)
@@ -50,3 +50,31 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.user.username
+
+class ExtraFile(models.Model):
+        project = models.ForeignKey(MusicProject)
+        user = models.ForeignKey(User)
+        TAB = "tb"
+        LYRIC = "ly"
+        CHORD = "ch"
+        LYRICANDCHORD = "lc"
+        CLASSICAL = "cn"
+        OTHER = "ot"
+        FILE_TYPE_CHOICES = (
+                (TAB, "Tab"),
+                (LYRIC, "Lyrics"),
+                (CHORD, "Chords"),
+                (LYRICANDCHORD, "Lyrics and Chords"),
+                (CLASSICAL, "Classical Notation"),
+                (OTHER, "Other"),
+                )
+        file_type = models.CharField(max_length = 2,
+                                     choices = FILE_TYPE_CHOICES,
+                                     default = OTHER,
+                                     blank = False,
+                                     )
+        extra = models.FileField()
+
+        def __str__(self):
+                return project.name + file_type
+        
