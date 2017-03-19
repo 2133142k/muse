@@ -189,11 +189,21 @@ function getStartingProjectPreviews(number){
 		}
 	}
 	// get user_id
-	var currenturl = window.location.pathname;
+	var user_id = -1;
+	var url = window.location.pathname.split('/');
+	alert (url);
+	alert (url.length == 5);
+	alert (url[1]);
+	alert (url[2]);
+	alert (url[3]);
+	
+	if (url.length == 5 && url[1] == "muse" && url[2] == "users"){
+		user_id = url[3];
+	}
 	
 	
 	
-	xhttp.open("GET","/muse/projects/?user_id=5&number=" + number,true);
+	xhttp.open("GET","/muse/projects/?user_id="+user_id+"&number=" + number,true);
 	xhttp.send();
 }
 

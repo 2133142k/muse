@@ -121,19 +121,26 @@ def getProjectPreviews(request):
     response = getUserInfo(request)
     number = request.GET.get('number')
 
-
-
     project_list = MusicProject.objects
-    user_id = int(request.GET.get('user_id', default = False))
-    print user_id
-    if (request.GET.get('user_id', default = False) != False):
+
+    user_id = request.GET.get('user_id', default = False)
+
+    if (user_id.isdigit()):
+        user_id = int(user_id)
+    else:
+        user_id = -1
+
+    
+    
+    #print user_id
+    if (user_id != -1):
         #get only owner's projects
         project_list = project_list.filter(user__id__exact=user_id)
     else:
         #return random projects
-        pass #randomise
+        project_list = project_list.all()
 
-        #workout number of projects to rerturn
+        #workout number of projects to return
     if (not number.isdigit()):
         number = 5
     else:
