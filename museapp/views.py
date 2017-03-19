@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
-from museapp.forms import UserForm, UserProfileForm, ProjectForm
+from museapp.forms import UserForm, UserProfileForm, ProjectForm, CommentForm
 from museapp.models import MusicProject, Comment
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core import serializers
 
 # Create your views here.
 def testBase(request):
@@ -114,7 +115,7 @@ def register(request):
 	else:
 	    user_form = UserForm()
 	    #profile_form = UserProfileForm()
-            return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
+        return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
 	
 def getProjectPreviews(request):
     response = getUserInfo(request)
@@ -124,6 +125,7 @@ def getProjectPreviews(request):
 
     project_list = MusicProject.objects
     user_id = int(request.GET.get('user_id', default = False))
+    print user_id
     if (request.GET.get('user_id', default = False) != False):
         #get only owner's projects
         project_list = project_list.filter(user__id__exact=user_id)
@@ -170,6 +172,7 @@ def project(request, project_name_slug):
             #project doesn't exist
             raise Http404("User does not exist")
         context_dict["Project"] = musicProject
+        context_dict["commentForm"] = CommentForm()
 ##        {"ProjectName":"13 bar blues",
 ##                               "ProjectAuthor":"UnluckyCoolCat24",
 ##                               "ProjectGenre":"Blues",
@@ -232,6 +235,103 @@ def userPage(request, user_id):
 ##        #not yet implemented
 ##        #change password
 ##        return HttpResponseBadRequest()
+
+def comments(request, project_name_slug):
+
+    comments = Comment.objects.filter(project__slug__exact=project_name_slug)
+
+
+    comment_list = []
+    for comment in comments.iterator():
+        print comment.user == request.user
+        print comment.project.user == request.user
+        can_Edit = (comment.user == request.user or comment.project.user == request.user)
+        next_comment = render(request, "muse/comment.html",{"comment":comment,"canEdit":can_Edit})
+##        {"id":comment.id,
+##                        "author":comment.user.username,
+##                        "commentText":comment.text,
+##                        "musicfile":comment.audio.url,
+##                        "canEdit":can_Edit,}
+        del next_comment["Content-Type"]
+        print next_comment
+        comment_list.append(str(next_comment))
+
+    if len(comment_list) == 0:
+        comment_list = ["There are no comments here!"]
+    response = {"comments":comment_list}
+    print response
+    #comments = serializers.serialize("json", comments)
+    
+    
+    #comments = [{"author":"Alice","commentText":"Cool, I like the chord change between the 4th and 5th bars"},
+    #                        {"author":"Huffbert","commentText":"Perhaps it should be D Major 7 instead of D Major after the E Major"},
+    #                        ]
+    #response = {"comments":comments}
+    #response = serializers.serialize("json", response)
+    return JsonResponse(response)
+
+def newComment(request, project_name_slug):
+    try:
+        project = MusicProject.objects.get(slug=project_name_slug)
+    except MusicProject.DoesNotExist:
+        project = None
+
+    author = request.user
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = author
+            comment.project = project
+            #comment.date = now???
+            comment.save()
+
+    return HttpResponseRedirect("/muse/projects/"+project_name_slug+"/")
+##	registered = False
+##	
+##	if request.method == 'POST':
+##		user_form = UserForm(data=request.POST)
+##		#profile_form = UserProfileForm(data=request.POST)
+##		
+##		if user_form.is_valid(): # and profile_form.is_valid():
+##			user = user_form.save()
+##			user.set_password(user.password)
+##			user.save()
+##			#profile = profile_form.save(commit=False)
+##			#profile.user = user
+##			#if 'picture' in request.FILES:
+##			#	profile.picture = request.FILES['picture']
+##			#profile.save()
+##			registerd = True
+##		else:
+##			print(user_form.errors)#, profile_form.errors)
+##	else:
+##	    user_form = UserForm()
+##	    #profile_form = UserProfileForm()
+##            return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
+
+def deleteComment(request, project_name_slug, comment_id):
+
+    comment = Comment.objects.get(id__exact=int(comment_id))
+    print "deleting comment" + comment_id
+    print request.user.id == comment.user.id
+    print request.user.id == comment.project.user.id
+    print request.method
+
+    #check user can edit
+    if ((request.user.id == comment.user.id) or (request.user.id == comment.project.user.id)):
+
+        print 
+        
+
+        if (request.method == "POST"):
+            comment.delete()
+            return HttpResponseRedirect("/muse/projects/"+project_name_slug+"/")
+
+            
+        
 
 def getUserInfo(request):
 

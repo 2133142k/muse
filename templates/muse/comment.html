@@ -1,21 +1,25 @@
-{# needs commentAuthor, musicFile, commentText, User, projectAuthor, commentId #}
-<div class="comment">
-	<!-- comment view -->
-	<h3>{{CommentAuthor}}</h3>
-	{% if MUSICFILE %}
-		<div class="music_player">
+<!-- comment -->
+<div class = "commentDiv">
+<ul>
+	<li><h2>{{comment.user.username}}</h2></li>
+	{% if comment.text %}
+		<li><p>{{comment.text}}</p></li>
+	{% endif %}
+	{% if comment.audio %}
+		<li><div class="music_player">
 			<audio controls preload="metadata">
-				<source src=MUSICFILE type="audio/mpeg">
+				<source  type="audio/mpeg" src={{comment.audio.url}}>
 				Music is not supported by your browser
 			</audio>
-		</div>
-	{ endif %}
-	{% if commentText %}
-	<p>{{CommentText}}</p>
+		</div></li>
 	{% endif %}
-	{% if commentAuthor == User or projectAuthor == User %}
-		<button type="button" onclick="removeComment({{commentId}})">
-		Remove 
-		</button>
+	{% if canEdit %}
+		<li><form class="comment_delete_form" method="post" action="{% url 'deleteComment' comment_id=comment.id project_name_slug=comment.project.slug %}" enctype="multipart/form-data">
+		
+		{% csrf_token %}
+		
+		<input type="submit" class="submit" name="submit" value="Delete"/>
+		</form></li>
 	{% endif %}
+</ul>
 </div>

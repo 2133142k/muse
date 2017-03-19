@@ -1,3 +1,13 @@
+function displayMessage(parentElement, messageText){
+	var messageDiv = document.createElement("div");
+	parentElement.appendChild(messageDiv);
+	//<h3>{{messageText}}</h3>
+	var h3element = document.createElement("h3");
+	var newText = document.createTextNode(messageText);
+	h3element.appendChild(newText);
+	messageDiv.appendChild(h3element);
+}
+
 function add_to_list(list, to_add){
 	var li = document.createElement("li");
 	li.appendChild(to_add);
@@ -40,6 +50,11 @@ function insertProjectPreviews(inputDict){
 	var numberOfPreviews = projectPreviews.length;
 	var projectPreviewsBlock = document.getElementById("projectPreviews");
 	var i;
+	
+	if (numberOfPreviews == 0){
+		
+		displayMessage(projectPreviewsBlock, "No projects")
+	}
 
 	for (i = 0; i < numberOfPreviews; i = i + 1){
 		
@@ -136,11 +151,12 @@ function addProjectPreviewAccessButtons(previewDiv, isLoggedIn, canEdit, slug){
 	}
 	else{
 	//LoginToView button
-	tempElement = document.createElement("button");
+	var newlink = document.createElement("a");
 	tempText = document.createTextNode("Log In To View");
-	tempElement.appendChild(tempText);
-	//add login event!!! Should either link to login page or ask user to login
-	divBlock.appendChild(tempElement);
+	newlink.appendChild(tempText);
+	newlink.className ="projectDescriptor";
+	newlink.setAttribute("href","/muse/login/");//link to login page
+	divBlock.appendChild(newlink);
 	}
 }
 

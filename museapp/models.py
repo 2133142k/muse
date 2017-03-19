@@ -25,7 +25,7 @@ class MusicProject(models.Model):
 	LyricAndChord = models.FileField()
 	ClassicalNotation = models.FileField()
 	PageDescription = models.CharField(max_length=500)
-	date = models.DateTimeField()
+	date = models.DateTimeField(auto_now_add=True)
 	genre = models.CharField(max_length=128)
 	name = models.CharField(max_length=128, unique=True)
 	user = models.ForeignKey(User)
@@ -45,8 +45,8 @@ class Comment(models.Model):
 	text = models.CharField(max_length=500)
 	user = models.ForeignKey(User)
 	project = models.ForeignKey(MusicProject)
-	date = models.DateTimeField()
+	date = models.DateTimeField(auto_now_add=True)
 	audio = models.FileField()
 
 	def __str__(self):
-		return self.user
+		return self.user.username

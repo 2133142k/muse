@@ -5,10 +5,10 @@ from museapp.models import MusicProject, UserProfile, Comment
 
 
 class CommentForm(forms.ModelForm):
-	text = forms.CharField(max_length=500,help_text="Comment")
+	text = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Comment")
 	
-	date = forms.DateTimeField()
-	audio = forms.FileField()
+	#date = forms.DateTimeField()
+	audio = forms.FileField(required = False)
 
 	class Meta:
 		model=Comment
