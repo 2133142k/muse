@@ -31,7 +31,7 @@ li {
 	
 }
 	
-input[type=submit], button, li a{
+input[type=submit], button, a{
 	background-color:#FFFFFF;
 	padding: 5px 5px 5px 5px;
 	border: 1px solid #505050;
@@ -43,7 +43,7 @@ input[type=submit], button, li a{
 	color: #000000;
 }
 
-input[type=submit]:hover, button:hover, li a:hover{
+input[type=submit]:hover, button:hover, a:hover{
 	background-color:#88C8FF;
 }
 	
@@ -75,12 +75,17 @@ form table tbody tr td{
 	
 form input[type=submit]{
 	padding: 5px 5px 5px 5px;
-	width: 100%;
+	min-width: 100px;
+	
 }
 #homeLogo{
 	float: left;	
 	height: 190;
 	width: 200;
+}
+
+#homeText{
+	
 }
 
 #headerLogo{
@@ -95,12 +100,20 @@ form input[type=submit]{
 	position: relative;
 }
 
+#header a{
+	background-color:transparent;
+	padding: 0px 0px 0px 0px;
+	border: none;
+	border-radius:0px;
+	color: transparent;
+}
+
 #sidebar{
 	
 	float: left;
 }
 
-#sidebar button, #sidebar a{
+#sidebar button, #sidebar a, #sidebar input{
 	min-width: 150px;
 	width: 100%;
 	padding: 5px 0px 5px 0px;
@@ -118,6 +131,10 @@ form input[type=submit]{
 	border: none;
 	overflow: hidden;
 	
+}
+
+#projectPreviews{
+	background-color: #FFFFFF;
 }
 
 .projectPreviewAccessButtons{

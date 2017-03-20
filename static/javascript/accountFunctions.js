@@ -1,19 +1,24 @@
-function removeAccount(accountId){
+function removeAccount(userId){
 	var accepted = window.confirm("Are you sure you want to delete your account?");
+	alert(accepted);
 	if (accepted == true) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function(){
+		alert(this.responseText);
 		if (this.readyState == 4 && this.status == 200){
-			//alert(this.responseText);
+			alert(this.responseText);
 			window.alert("Account deleted");
 			var homeUrl = "/muse/";
 			window.location.href = homeUrl;
 		}
-		
-		//What to use to delete?
-		//xhttp.open("GET","/muse/accounts/{{accountNo}}/delete/",true);
-		//xhttp.send();
+		else{
+			alert("Delete failed");
+		}
 	}
+		xhttp.open("POST","/muse/users/"+userId+"/delete/",true);
+		alert("sending request");
+		xhttp.send();
+
 }
 }
 

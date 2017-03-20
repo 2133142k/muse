@@ -8,7 +8,7 @@ class CommentForm(forms.ModelForm):
 	text = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Comment")
 	
 	#date = forms.DateTimeField()
-	audio = forms.FileField(required = False)
+	audio = forms.FileField(required = False, )
 
 	class Meta:
 		model=Comment
@@ -18,7 +18,7 @@ class ProjectForm(forms.ModelForm):
         name = forms.CharField(max_length=128, help_text="Please input name of the project.")
         genre = forms.CharField(max_length=128,help_text="Please input the genre.")
         PageDescription = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Please enter the description for the project")
-	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False)
+	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False, )
 	#tab = forms.FileField(help_text="Please input the file to upload.",required=False)
 	#LyricAndChord = forms.FileField(help_text="Please input the file to upload.",required=False)
 	#ClassicalNotation = forms.FileField(help_text="Please input the file to upload.",required=False)

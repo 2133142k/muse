@@ -33,7 +33,9 @@
 
 
 <li>{% include "muse/comments.html" %}</li>
+{% if user.is_authenticated %}
 <li>{% include "muse/newComment.html" %}</li>
+{% endif %}
 </ul>
 
 {% endblock %}

@@ -39,7 +39,7 @@ class MusicProject(models.Model):
 		verbose_name_plural = 'MusicProject'
 
 	def __str__(self):
-		return self.user.username
+		return str(self.name) + " by " + str(self.user.username)
 
 class Comment(models.Model):
 	text = models.CharField(max_length=500)
@@ -49,7 +49,7 @@ class Comment(models.Model):
 	audio = models.FileField()
 
 	def __str__(self):
-		return self.user.username
+		return "comment on "+ self.project.name +" by " + str(self.user.username)
 
 class ExtraFile(models.Model):
         project = models.ForeignKey(MusicProject)

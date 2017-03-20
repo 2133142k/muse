@@ -12,12 +12,11 @@
 	<li><button type="button" onclick="newProject()">
 		Create New Project
 	</button></li>
-	<li><button type="button" onclick="changePassword({{accountId}})">
-		Change Password
-	</button></li>
-	<li><button type="button" onclick="removeAccount({{accountId}})">
-		Delete Account
-	</button></li>
+	<li><a href="{% url 'changePassword' %}">Change Password</a></li>
+	<li><form id="delete_user_form" method="post" action="{% url 'deleteUser' user_id=user.id%}" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input type="submit" value = "Delete Account">
+	</input></form></li>
 	{% else %}
 	<li><a href="{% url 'login' %}">Sign In</a></li>
 	<li><a href="{% url 'register' %}">Sign Up</a></li>

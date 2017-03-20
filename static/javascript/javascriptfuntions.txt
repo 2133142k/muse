@@ -1,5 +1,0 @@
-javascript functions
-removeComment(commentId)
-editProject(projectId)
-removeProject(projectId)
-removeAccount(accountId)

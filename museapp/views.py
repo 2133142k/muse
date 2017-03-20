@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
 from museapp.forms import UserForm, UserProfileForm, ProjectForm, CommentForm
 from museapp.models import MusicProject, Comment
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core import serializers
 
 # Create your views here.
@@ -82,9 +83,9 @@ def user_login(request):
                 return HttpResponseRedirect("/muse/users/%d/" %user_id)
             else:
                 #user disabled
-                return HttpResponse("Your account is disabled")
+                return render ( request, "muse/message.html", {"message":"Your account is disabled"})
         else:
-            return HttpResponse("Invalid username or password")
+            return render ( request, "muse/message.html", {"message":"Invalid username or password"})
 
 
     return render ( request, "muse/login.html", context_dict)
@@ -104,6 +105,7 @@ def register(request):
 			user = user_form.save()
 			user.set_password(user.password)
 			user.save()
+			update_session_auth_hash(request, user)
 			#profile = profile_form.save(commit=False)
 			#profile.user = user
 			#if 'picture' in request.FILES:
@@ -116,6 +118,32 @@ def register(request):
 	    user_form = UserForm()
 	    #profile_form = UserProfileForm()
         return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
+
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()#updates password and logs user out
+            update_session_auth_hash(request, user)#logs user back in
+            return render ( request, "muse/message.html", {"message":"Your password has been changed"})
+        else:
+            return render ( request, "muse/message.html", {"message":"There was an error changing your password"})
+    else:
+        form = PasswordChangeForm(request.user)
+    context_dict = {"form":form}
+    return render(request, "muse/changePassword.html",context_dict)
+
+def user_delete(request, user_id):
+    user = User.objects.get(id__exact=int(user_id))
+
+    #check user can edit
+    if request.user.id == user.id:
+
+        if (request.method == "POST"):
+            user.delete()
+            return render ( request, "muse/message.html", {"message":"user " + user_id + " deleted"})
+
+    return render ( request, "muse/message.html", {"message":"Delete failed"})
 	
 def getProjectPreviews(request):
     response = getUserInfo(request)
@@ -158,14 +186,22 @@ def getProjectPreviews(request):
         next_project["NumberOfComments"] = number_of_comments
         next_project["Author"] = {"name": project.user.username,
                                   "id": project.user.id}
-        projects.append(next_project)
+
+        rendered_project = render(request,'muse/projectPreview.html',next_project)
+        del rendered_project["Content-Type"]
+        print rendered_project
+        projects.append(str(rendered_project))
+    print projects
+        
+
+        
     
 
 
     #return projects JSON
     response["ProjectPreviews"] = projects
 
-    print response
+    #print response
     
     return JsonResponse(response)
 
@@ -202,7 +238,7 @@ def project(request, project_name_slug):
 
     else:
         #not a valid request
-        return HttpResponseBadRequest()
+        return render ( request, "muse/message.html", {"message":"Found no projects"})
 
 def createProject(request):
 
@@ -339,7 +375,7 @@ def deleteComment(request, project_name_slug, comment_id):
             comment.delete()
             return HttpResponseRedirect("/muse/projects/"+project_name_slug+"/")
 
-            
+    render ( request, "muse/message.html", {"message":"Delete failed"})   
         
 
 def getUserInfo(request):

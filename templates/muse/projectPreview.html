@@ -1,16 +1,14 @@
 {# needs ProjectName, ProjectAuthor, ProjectGenre, NumberOfComments, ProjectDescription, User, SingedIn, ProjectId #}
-<div class="projectPreview">
 	<!-- preview of project -->
-	<h3>{{ProjectName}}</h3>
-	<p>{{ProjectAuthor}}</p>
-	<p>{{ProjectGenre}}</p>
-	<p>Comments - {{NumberOfComments}}</p>
-	<p>{{ProjectDescription}}</p>
+	<ul>
+	<li><a class="projectDescriptor projectNameLink" href="{% url 'projectPage' project_name_slug=slug %}">{{name}}</a></li>
+	<li><a class="projectDescriptor" href="{% url 'userPage' user_id=Author.id%}">{{Author.name}}</a></li>
+	<li><p class="projectDescriptor">{{genre}}</p></li>
+	<li><p class="projectDescriptor">Comments - {{NumberOfComments}}</p></li>
+	<li><p class="projectDescriptor">{{PageDescription}}</p></li>
 	{% if SignedIn %}
-		<button type="button">
-		View
-		</button>
-		{% if ProjectAuthor == User %}
+		<a class="projectDescriptor" href="{% url 'projectPage' project_name_slug=slug%}" >View</a>
+		{% if ProjectAuthor.id == request.user.id %}
 			<button type="button" onclick="editProject({{ProjectId}})">
 			Edit
 			</button>
@@ -19,6 +17,5 @@
 			</button>
 		{% endif %}
 	{% else %}
-		<a href=SIGNINPAGE>Sign In to View</a>
+		<a class="projectDescriptor" href="{% url 'login' %}">Sign In to View</a>
 	{% endif %}
-</div>

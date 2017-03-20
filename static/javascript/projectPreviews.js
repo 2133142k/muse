@@ -43,7 +43,7 @@ function newProjectLink(parentDiv, projectName, projectSlug, isLoggedIn){
 
 function insertProjectPreviews(inputDict){
 	
-	alert(JSON.stringify(inputDict));
+	//alert(JSON.stringify(inputDict));
 
 	var isLoggedIn = inputDict.SignedIn;
 	var projectPreviews = inputDict.ProjectPreviews;
@@ -66,46 +66,47 @@ function insertProjectPreviews(inputDict){
 
 function addProjectPreview(projectPreview, parentDiv, isLoggedIn){
 	
-	var tempElement;
-	var tempText;
+	//var tempElement;
+	//var tempText;
 	var previewDiv = document.createElement("div");
 	var list = document.createElement("ul");
 	previewDiv.className ="projectPreview";
+	previewDiv.innerHTML = projectPreview;
 	
-	previewDiv.id ="projectReview"+projectPreview.nameSlug;
+	// previewDiv.id ="projectReview"+projectPreview.nameSlug;
 	
-	add_to_list(list,newProjectLink(previewDiv, projectPreview.name, projectPreview.slug, isLoggedIn));
-	//tempElement = document.createElement("h3");
-	//tempText = document.createTextNode(projectPreview.name);
-	//tempElement.appendChild(tempText);
-	//previewDiv.appendChild(tempElement);
+	// add_to_list(list,newProjectLink(previewDiv, projectPreview.name, projectPreview.slug, isLoggedIn));
+	// //tempElement = document.createElement("h3");
+	// //tempText = document.createTextNode(projectPreview.name);
+	// //tempElement.appendChild(tempText);
+	// //previewDiv.appendChild(tempElement);
 	
-	add_to_list(list,newAuthorLink(previewDiv, projectPreview.Author));
-	//tempElement = document.createElement("p");
-	//tempText = document.createTextNode(projectPreview.Author.name);
-	//tempElement.appendChild(tempText);
-	//previewDiv.appendChild(tempElement);
+	// add_to_list(list,newAuthorLink(previewDiv, projectPreview.Author));
+	// //tempElement = document.createElement("p");
+	// //tempText = document.createTextNode(projectPreview.Author.name);
+	// //tempElement.appendChild(tempText);
+	// //previewDiv.appendChild(tempElement);
 	
-	//tempElement = document.createElement("p");
-	//tempText = document.createTextNode(projectPreview.genre);
-	//tempElement.className ="projectDescriptor";
-	//tempElement.appendChild(tempText);
-	//add_to_list(list,tempElement);
+	// //tempElement = document.createElement("p");
+	// //tempText = document.createTextNode(projectPreview.genre);
+	// //tempElement.className ="projectDescriptor";
+	// //tempElement.appendChild(tempText);
+	// //add_to_list(list,tempElement);
 	
-	tempElement = document.createElement("p");
-	tempText = document.createTextNode("Comments - " + projectPreview.NumberOfComments);
-	tempElement.className ="projectDescriptor";
-	tempElement.appendChild(tempText);
-	add_to_list(list,tempElement);
+	// tempElement = document.createElement("p");
+	// tempText = document.createTextNode("Comments - " + projectPreview.NumberOfComments);
+	// tempElement.className ="projectDescriptor";
+	// tempElement.appendChild(tempText);
+	// add_to_list(list,tempElement);
 	
-	//tempElement = document.createElement("p");
-	//tempText = document.createTextNode(projectPreview.PageDescription);
-	//tempElement.className ="projectDescriptor";
-	//tempElement.appendChild(tempText);
-	//add_to_list(list,tempElement);
+	// //tempElement = document.createElement("p");
+	// //tempText = document.createTextNode(projectPreview.PageDescription);
+	// //tempElement.className ="projectDescriptor";
+	// //tempElement.appendChild(tempText);
+	// //add_to_list(list,tempElement);
 	
-	previewDiv.appendChild(list);
-	addProjectPreviewAccessButtons(previewDiv, isLoggedIn, projectPreview.canEdit, projectPreview.slug);
+	// previewDiv.appendChild(list);
+	// addProjectPreviewAccessButtons(previewDiv, isLoggedIn, projectPreview.canEdit, projectPreview.slug);
 	
 	parentDiv.appendChild(previewDiv);
 }
@@ -191,11 +192,11 @@ function getStartingProjectPreviews(number){
 	// get user_id
 	var user_id = -1;
 	var url = window.location.pathname.split('/');
-	alert (url);
-	alert (url.length == 5);
-	alert (url[1]);
-	alert (url[2]);
-	alert (url[3]);
+	//alert (url);
+	//alert (url.length == 5);
+	//alert (url[1]);
+	//alert (url[2]);
+	//alert (url[3]);
 	
 	if (url.length == 5 && url[1] == "muse" && url[2] == "users"){
 		user_id = url[3];
