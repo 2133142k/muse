@@ -61,13 +61,14 @@ class ExtraFile(models.Model):
         CLASSICAL = "cn"
         OTHER = "ot"
         FILE_TYPE_CHOICES = (
+                (OTHER, "Other"),
                 (TAB, "Tab"),
                 (LYRIC, "Lyrics"),
                 (CHORD, "Chords"),
                 (LYRICANDCHORD, "Lyrics and Chords"),
-                (CLASSICAL, "Classical Notation"),
-                (OTHER, "Other"),
+                (CLASSICAL, "Classical Notation"),                
                 )
+        FILE_TYPE_DICT = dict(FILE_TYPE_CHOICES)
         file_type = models.CharField(max_length = 2,
                                      choices = FILE_TYPE_CHOICES,
                                      default = OTHER,
@@ -75,6 +76,11 @@ class ExtraFile(models.Model):
                                      )
         extra = models.FileField()
 
+        def name(self):
+                return self.FILE_TYPE_DICT[self.file_type]
+
         def __str__(self):
-                return project.name + file_type
+                return self.project.name + self.file_type
+
+                
         

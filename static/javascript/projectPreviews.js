@@ -180,7 +180,7 @@ function deleteProject(projectSlug){
 
 //functionChangeLoggedIn
 
-function getStartingProjectPreviews(number){
+function getStartingProjectPreviews(){
 	//change to request from server
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function(){
@@ -197,9 +197,13 @@ function getStartingProjectPreviews(number){
 	//alert (url[1]);
 	//alert (url[2]);
 	//alert (url[3]);
-	
+	var number;
 	if (url.length == 5 && url[1] == "muse" && url[2] == "users"){
 		user_id = url[3];
+		number = 0;//get all of a users projects
+	}
+	else{
+		number = 5;
 	}
 	
 	
@@ -210,8 +214,7 @@ function getStartingProjectPreviews(number){
 
 function onPageLoad(isLoggedIn, username, projectAuthor){
 	
-	var number = 5;
-	getStartingProjectPreviews(number);
+	getStartingProjectPreviews();
 	}
 	
 window.onload = onPageLoad(); 

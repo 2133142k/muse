@@ -19,12 +19,12 @@
 			</audio>
 			</div>
 		{% endif %}
-		{% if Project.ExtraFiles %}
+		{% if ExtraFiles %}
 			<div class = "otherFiles">
-			{% for file in Project.ExtraFiles %}
+			{% for file in ExtraFiles %}
 			<div class = "otherFile">
-			<h4 class = "fileTypeLabel">{{file.filetype}}</h4>
-			<a href = {{file.location}}{{file.filename}} class = "otherFileLink">{{file.filename}}</a>
+			<p class = "projectDescriptor">Notation: {{ file.name }}</p>
+			<a href = {{file.extra.url}} class = "projectDescriptor otherFileLink">{{file.extra.name}}</a>
 			</div>
 			{% endfor %}
 			</div>

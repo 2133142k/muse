@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest
-from museapp.forms import UserForm, UserProfileForm, ProjectForm, CommentForm
-from museapp.models import MusicProject, Comment
+from museapp.forms import UserForm, UserProfileForm, ProjectForm, CommentForm, ExtraFileFormSet
+from museapp.models import MusicProject, Comment, ExtraFile
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
@@ -160,26 +160,25 @@ def getProjectPreviews(request):
     else:
         user_id = -1
 
-    
-    
-    #print user_id
     if (user_id != -1):
         #get only owner's projects
         project_list = project_list.filter(user__id__exact=user_id)
     else:
         #return random projects
-        project_list = project_list.all()
+        project_list = project_list.order_by("?")[:]
 
         #workout number of projects to return
     if (not number.isdigit()):
         number = 5
     else:
         number = int(number)
-    if number < len(project_list):
+
+    #clip the number of returned projects
+    if number < len(project_list) and number != 0:#if 0 return all projects
         project_list = project_list[:number]
 
     projects = []
-    for project in project_list.iterator():
+    for project in project_list:
         next_project = {"name":project.name,
                         "slug":project.slug,
                         "genre":project.genre,
@@ -191,19 +190,11 @@ def getProjectPreviews(request):
 
         rendered_project = render(request,'muse/projectPreview.html',next_project)
         del rendered_project["Content-Type"]
-        print rendered_project
+
         projects.append(str(rendered_project))
-    print projects
-        
-
-        
-    
 
 
-    #return projects JSON
     response["ProjectPreviews"] = projects
-
-    #print response
     
     return JsonResponse(response)
 
@@ -216,9 +207,12 @@ def project(request, project_name_slug):
             musicProject = MusicProject.objects.get(slug=project_name_slug)
         except:
             #project doesn't exist
-            raise Http404("User does not exist")
+            raise Http404("Project does not exist")
+        extra_files = ExtraFile.objects.filter(project=musicProject)
+        context_dict["ExtraFiles"] = extra_files
         context_dict["Project"] = musicProject
         context_dict["commentForm"] = CommentForm()
+        print context_dict
 ##        {"ProjectName":"13 bar blues",
 ##                               "ProjectAuthor":"UnluckyCoolCat24",
 ##                               "ProjectGenre":"Blues",
@@ -229,16 +223,16 @@ def project(request, project_name_slug):
 
         return render ( request, "muse/projectView.html", context_dict)
 
-    elif (request.method == "DELETE"):
-        #not yet implemented
-        #delete project
-        return HttpResponseNotModified()
-
-    elif (request.method == "PUT"):
-        #not yet implemented
-        #edit project
-        return HttpResponseNotModified()
-
+##    elif (request.method == "DELETE"):
+##        #not yet implemented
+##        #delete project
+##        return HttpResponseNotModified()
+##
+##    elif (request.method == "PUT"):
+##        #not yet implemented
+##        #edit project
+##        return HttpResponseNotModified()
+##
     else:
         #not a valid request
         return render ( request, "muse/message.html", {"message":"Found no projects"})
@@ -246,19 +240,33 @@ def project(request, project_name_slug):
 @login_required
 def createProject(request):
 
+    print str(request.FILES)
+
     if request.method == "POST":
-        form = ProjectForm(request.POST)
-        if form.is_valid():
+        form = ProjectForm(request.POST, request.FILES, prefix="project")
+        extra_form = ExtraFileFormSet(request.POST, request.FILES, prefix="extra_files")
+        if form.is_valid() and extra_form.is_valid():
             project = form.save(commit=False)
+            project.musicFile = request.FILES["project-MusicFile"]
             project.user = request.user
             project.save()
+
+            #extra_files = extra_form.save(commit=False)
+            for extra in extra_form:
+                extra_file = extra.save(commit=False)
+
+                if extra_file.extra:#only commit if there is a file
+                    extra_file.project = project
+                    extra_file.user = request.user
+                    extra_file.save()
             return HttpResponseRedirect("/muse/users/%d/" %request.user.id)
         else:
             print form.errors
     else:
-        form = ProjectForm()
+        form = ProjectForm(prefix="project")
+        extra_form = ExtraFileFormSet(prefix="extra_files")
 
-    return render (request, "muse/newProject.html", {"projectForm":form})
+    return render (request, "muse/newProject.html", {"projectForm":form, "FileFormSet":extra_form})
 
 @login_required
 def userPage(request, user_id):
