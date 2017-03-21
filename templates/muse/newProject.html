@@ -1,8 +1,10 @@
 {% extends "muse/base.html" %}
 
+{% block title_block %}New Project{% endblock %}
+{% block page_title %}Create your new project{% endblock %}
+
 {% block content %}
 
-	<h1>Create your new project</h1>
 	<div>
 		<form id="project_form" method="post" action="{% url 'newProject' %}" enctype="multipart/form-data">
 		

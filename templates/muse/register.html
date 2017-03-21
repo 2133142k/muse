@@ -2,8 +2,11 @@
 
 {% load staticfiles %}
 
+{% block title_block %}Register{% endblock %}
+{% block page_title %}Register for Muse{% endblock %}
+
 {% block content %}
-	<h1>Register for Muse</h1>
+
 	<div>
 	{% if registered %}
 		<a href="{% url 'index' %}">Return to the homepage.</a>

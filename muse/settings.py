@@ -117,6 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Login 
+LOGIN_URL = "/muse/login/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

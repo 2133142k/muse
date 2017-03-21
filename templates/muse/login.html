@@ -2,16 +2,15 @@
 
 {% load staticfiles %}
 
+{% block title_block %}Login{% endblock %}
+{% block page_title %}Login to Muse{% endblock %}
+
 {% block content %}
-<h1>Login to Muse</h1>
 <div>
 <form id="login_form" method="post" action="{% url 'login' %}">
 	{% csrf_token %}
 	<table>
-	<tr><th>Username:</th>
-	<td><input type="text" name="username" value"" size="50" /></td></tr>
-	<tr><th>Password:</th>
-	<td><input type="password" name="password" value"" size="50" /></td></tr>
+	{{ form.as_table }}
 	</table>
 	<input class="submit" type="submit" value="Login" />
 </form>

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from museapp.models import MusicProject, UserProfile, Comment, ExtraFile
 
 
@@ -31,15 +32,15 @@ class ProjectForm(forms.ModelForm):
 		model = MusicProject
 		fields =('name','genre','PageDescription','MusicFile')#,'tab','LyricAndChord','ClassicalNotation')
 
-class UserForm(forms.ModelForm):
-	username = forms.CharField(max_length=128,help_text="Please enter your username.")
+class UserForm(UserCreationForm):
+	#username = forms.CharField(max_length=128,help_text="Please enter your username.")
 	email = forms.EmailField()
-	password = forms.CharField(widget=forms.PasswordInput(),help_text="Please enter a password.")
+	#password = forms.CharField(widget=forms.PasswordInput(),help_text="Please enter a password.")
 	name = forms.CharField(max_length=128,help_text="Please enter your name.")
 
-	class Meta:
+	class Meta(UserCreationForm.Meta):
 		model = User
-		fields = ('username','password','email','name')
+		fields = UserCreationForm.Meta.fields + ('email','name')
 
 class UserProfileForm(forms.ModelForm):
 	picture = forms.ImageField(help_text="Select a profile picture to upload.",required=False)

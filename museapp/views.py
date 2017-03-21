@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404, HttpResponseBadRequest
 from museapp.forms import UserForm, UserProfileForm, ProjectForm, CommentForm
 from museapp.models import MusicProject, Comment
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.core import serializers
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def testBase(request):
     context_dict = {"SignedIn":False, "Username": "Alice"}
@@ -63,33 +63,30 @@ def about(request):
     return render ( request, "muse/about.html", context_dict)
 
 def user_login(request):
-    context_dict = {"SignedIn":False}
+    #context_dict = {"SignedIn":False}
+    context_dict = {}
 
     if request.method == "POST":
-        #get credentials
-        username = request.POST.get("username")
-        password = request.POST.get("password")
 
-        #check credentials
-        user = authenticate(username=username, password=password)
+        login_form = AuthenticationForm(data = request.POST)
 
-        if user:
-            if user.is_active:
-                #user credentials correct and user is active log them in
-                login(request, user)
-
-                #redirect to users page
-                user_id = user.id
-                return HttpResponseRedirect("/muse/users/%d/" %user_id)
-            else:
-                #user disabled
-                return render ( request, "muse/message.html", {"message":"Your account is disabled"})
-        else:
-            return render ( request, "muse/message.html", {"message":"Invalid username or password"})
+        if login_form.is_valid():
+            login(request, login_form.get_user())
+            #print login_form.user.password
 
 
+            #redirect to users page
+            user_id = login_form.get_user().id
+            return HttpResponseRedirect("/muse/users/%d/" %user_id)
+
+    else:
+        login_form = AuthenticationForm()
+        context_dict["message"] = "Please login!"
+
+    context_dict["form"] = login_form
     return render ( request, "muse/login.html", context_dict)
 
+@login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect("/muse/")
@@ -102,16 +99,19 @@ def register(request):
 		#profile_form = UserProfileForm(data=request.POST)
 		
 		if user_form.is_valid(): # and profile_form.is_valid():
+                        print user_form.get_user().password
 			user = user_form.save()
-			user.set_password(user.password)
-			user.save()
-			update_session_auth_hash(request, user)
+			print user.password
+			#user.set_password(user.password)
+			#user.save()
+			login(request, user)
 			#profile = profile_form.save(commit=False)
 			#profile.user = user
 			#if 'picture' in request.FILES:
 			#	profile.picture = request.FILES['picture']
 			#profile.save()
 			registerd = True
+			return HttpResponseRedirect("/muse/users/%d/" %user_id)
 		else:
 			print(user_form.errors)#, profile_form.errors)
 	else:
@@ -119,20 +119,22 @@ def register(request):
 	    #profile_form = UserProfileForm()
         return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()#updates password and logs user out
             update_session_auth_hash(request, user)#logs user back in
-            return render ( request, "muse/message.html", {"message":"Your password has been changed"})
+            return render ( request, "muse/changePassword.html", {"message":"Your password has been changed"})
         else:
-            return render ( request, "muse/message.html", {"message":"There was an error changing your password"})
+            return render ( request, "muse/changePassword.html", {"message":"There was an error changing your password"})
     else:
         form = PasswordChangeForm(request.user)
     context_dict = {"form":form}
     return render(request, "muse/changePassword.html",context_dict)
 
+@login_required
 def user_delete(request, user_id):
     user = User.objects.get(id__exact=int(user_id))
 
@@ -147,11 +149,11 @@ def user_delete(request, user_id):
 	
 def getProjectPreviews(request):
     response = getUserInfo(request)
-    number = request.GET.get('number')
+    number = request.GET.get('number', default = "")
 
     project_list = MusicProject.objects
 
-    user_id = request.GET.get('user_id', default = False)
+    user_id = request.GET.get('user_id', default = "")
 
     if (user_id.isdigit()):
         user_id = int(user_id)
@@ -205,6 +207,7 @@ def getProjectPreviews(request):
     
     return JsonResponse(response)
 
+@login_required
 def project(request, project_name_slug):
     context_dict = getUserInfo(request)
     if (request.method == "GET"):
@@ -240,6 +243,7 @@ def project(request, project_name_slug):
         #not a valid request
         return render ( request, "muse/message.html", {"message":"Found no projects"})
 
+@login_required
 def createProject(request):
 
     if request.method == "POST":
@@ -256,6 +260,7 @@ def createProject(request):
 
     return render (request, "muse/newProject.html", {"projectForm":form})
 
+@login_required
 def userPage(request, user_id):
     context_dict = getUserInfo(request)
     try:
@@ -281,6 +286,7 @@ def userPage(request, user_id):
 ##        #change password
 ##        return HttpResponseBadRequest()
 
+@login_required
 def comments(request, project_name_slug):
 
     comments = Comment.objects.filter(project__slug__exact=project_name_slug)
@@ -315,6 +321,7 @@ def comments(request, project_name_slug):
     #response = serializers.serialize("json", response)
     return JsonResponse(response)
 
+@login_required
 def newComment(request, project_name_slug):
     try:
         project = MusicProject.objects.get(slug=project_name_slug)
@@ -357,6 +364,7 @@ def newComment(request, project_name_slug):
 ##	    #profile_form = UserProfileForm()
 ##            return render ( request, 'muse/register.html', {'user_form': user_form,  'registered': registered})#'profile_form': profile_form,})
 
+@login_required
 def deleteComment(request, project_name_slug, comment_id):
 
     comment = Comment.objects.get(id__exact=int(comment_id))

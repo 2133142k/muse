@@ -1,5 +1,5 @@
-{% extends "muse/base.html" %}
-
 {% block content %}
-<h1>{{message}}</h1>
+{% if message %}
+<h4 class = "message">{{message}}</h4>
+{% endif %}
 {% endblock %}

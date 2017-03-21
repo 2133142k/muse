@@ -19,6 +19,8 @@
 	<hr />
 	{% include "muse/accountPanel.html" %}
 	<div id="contentBlock">
+	<h1>{% block page_title %}Be Inspired!{% endblock %}</h1>
+	{% include "muse/message.html" %}
 	{% block content %}
 	{% endblock %}
 	</div>
