@@ -21,9 +21,6 @@ class UserProfile(models.Model):
 
 class MusicProject(models.Model):
 	musicFile = models.FileField()
-	#tab = models.FileField()
-	#LyricAndChord = models.FileField()
-	#ClassicalNotation = models.FileField()
 	PageDescription = models.CharField(max_length=500)
 	date = models.DateTimeField(auto_now_add=True)
 	genre = models.CharField(max_length=128)
@@ -54,6 +51,8 @@ class Comment(models.Model):
 class ExtraFile(models.Model):
         project = models.ForeignKey(MusicProject)
         user = models.ForeignKey(User)
+
+        #Choices for filetype
         TAB = "tb"
         LYRIC = "ly"
         CHORD = "ch"
@@ -68,6 +67,7 @@ class ExtraFile(models.Model):
                 (LYRICANDCHORD, "Lyrics and Chords"),
                 (CLASSICAL, "Classical Notation"),                
                 )
+        
         FILE_TYPE_DICT = dict(FILE_TYPE_CHOICES)
         file_type = models.CharField(max_length = 2,
                                      choices = FILE_TYPE_CHOICES,
@@ -76,6 +76,7 @@ class ExtraFile(models.Model):
                                      )
         extra = models.FileField()
 
+        #returns the ExtraFile's filetype in human-readable form 
         def name(self):
                 return self.FILE_TYPE_DICT[self.file_type]
 
