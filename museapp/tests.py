@@ -1,8 +1,11 @@
 from django.test import TestCase
 from museapp.models import MusicProject
 from django.contrib.auth.models import User, UserManager
+from django.contrib import auth
 from django.core.urlresolvers import reverse
 
+def createTestUser(client):
+    user = User.objects.create_user(username = "TestUser",password = "TestPassword")
 
 
 class homePageViewTests(TestCase):
@@ -15,7 +18,7 @@ class homePageViewTests(TestCase):
 
 class accountPanelTests(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username = "TestUser",password = "TestPassword")
+        user = createTestUser(self.client)
 
     def testWhenNotLoggedIn(self):
         #check that account Panel displays correctly when not logged in
@@ -71,8 +74,7 @@ class aboutViewTests(TestCase):
 
 class userLoginViewTests(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username = "TestUser",password = "TestPassword")
-        self.client.logout()
+        user = createTestUser(self.client)
 
     def testGetView(self):
         #Test get returns a form and a message
@@ -107,6 +109,63 @@ class userLoginViewTests(TestCase):
 
         #Check page redirects
         self.assertTrue(len(response.redirect_chain)>0)
+
+class userLogoutViewTests(TestCase):
+    def setUp(self):
+        user = createTestUser(self.client)
+        
+
+    def testGetView(self):
+        #check view redirects and that user is logged out afterwards
+
+        self.client.login(username = "TestUser", password = "TestPassword")
+        response = self.client.get(reverse("logout"))
+
+        #Check view redirects
+        self.assertEqual(response.status_code, 302)
+
+        #Check user logged out
+        self.assertFalse(User.objects.get(username="TestUser").is_authenticated())
+
+class registerViewTests(TestCase):
+
+    def testGetView(self):
+        #check view renders
+
+        response = self.client.get(reverse("register"))
+
+        self.assertEqual(response.status_code, 200)
+
+    def testEmptyPost(self):
+        #check user not created on an empty post
+
+        response = self.client.post(reverse("register"))
+
+        self.assertEqual(response.status_code, 200)
+
+        #check no user has been created
+        self.assertEqual(User.objects.count(), 0)
+
+    def testCorrectPost(self):
+        #check user created on a correct post
+
+        response = self.client.post(reverse("login"),{"name":"TestUser","passwd":"TestPassword"}, follow = True)
+
+        self.assertEqual(response.status_code, 200)
+
+        #check a user is created
+        self.assertEqual(User.objects.count(), 1)
+
+        #check logged in
+        user = auth.get_user(self.client)
+        self.assertTrue(user.is_authenticated())
+
+        
+
+        
+
+        
+            
         
 
         
