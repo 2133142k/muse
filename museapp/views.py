@@ -51,7 +51,7 @@ def register(request):
 		if user_form.is_valid():
 			user = user_form.save()
 			login(request, user)
-			return HttpResponseRedirect("/muse/users/%d/" %user_id)
+			return HttpResponseRedirect("/muse/users/%d/" %user.id)
 		    
 	else:
 	    user_form = UserForm()
@@ -81,7 +81,7 @@ def user_delete(request):
 
     if (request.method == "POST"):
         user.delete()
-        return render ( request, "muse/givemessage.html", {"message":"user " + user_id + " deleted"})
+        return render ( request, "muse/givemessage.html", {"message":"user " + str(user_id) + " deleted"})
 
     return render ( request, "muse/givemessage.html", {"message":"Delete failed"})
 	
@@ -183,6 +183,21 @@ def createProject(request):
         extra_form = ExtraFileFormSet(prefix="extra_files")
 
     return render (request, "muse/newProject.html", {"projectForm":form, "FileFormSet":extra_form})
+
+def deleteProject(request, project_name_slug):
+
+    if request.method =="POST":
+        try:
+            project = MusicProject.objects.get(slug=project_name_slug)
+        except:
+            raise Http404("Project does not exist")
+        user = request.user
+        if project.user.id == user.id:
+            project.delete()
+            return HttpResponseRedirect("/muse/users/"+str(user.id)+"/")
+
+    HttpResponseRedirect("/muse/projects/"+project_name_slug+"/")
+
 
 @login_required
 def userPage(request, user_id):

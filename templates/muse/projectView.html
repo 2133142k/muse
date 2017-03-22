@@ -29,6 +29,12 @@
 			{% endfor %}
 			</div>
 		{% endif %}
+		{% if user.id == Project.user.id %}
+			<form id="delete_project_form" method="post" action="{% url 'deleteProject' project_name_slug=Project.slug %}" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="submit" value = "Delete Project"></input>
+			</form>
+		{% endif %}
 </div></li>
 
 

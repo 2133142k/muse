@@ -25,6 +25,12 @@ class ProjectForm(forms.ModelForm):
 class UserForm(UserCreationForm):
 	email = forms.EmailField( label = "Email")
 	name = forms.CharField(max_length=128,help_text="Please enter your name.", label = "Name")
+	
+	def clean_email(self):
+		data =self.cleaned_data["email"]
+		if User.objects.filter(email=data).exists():
+			raise forms.ValidationError("Email already used")
+		return data
 
 	class Meta(UserCreationForm.Meta):
 		model = User
