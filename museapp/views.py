@@ -164,7 +164,7 @@ def createProject(request):
         extra_form = ExtraFileFormSet(request.POST, request.FILES, prefix="extra_files")
         if form.is_valid() and extra_form.is_valid():
             project = form.save(commit=False)
-            #project.musicFile = request.FILES["MusicFile"]
+            project.musicFile = request.FILES["project-MusicFile"]
             project.user = request.user
             project.save()
 
