@@ -1,12 +1,14 @@
+{% load staticfiles %}
 {# needs SignedIn, USERNAME #}
 <!-- Link Section -->
 <div class ="linkSection">
-<a href=ABOUTPAGE>About</a>
-{% if SignedIn %}
-<a href=USERSPAGE> {{USERNAME}}'s Page</a>
-<a href=SIGNOUTPAGE>Sign Out</a>
+<a href="{% url 'home' %}">Home</a>
+<a href="{% url 'about' %}">About</a>
+{% if user.is_authenticated %}
+<a href=USERSPAGE> {{user.username}}'s Page</a>
+<a href="{% url 'logout' %}">Sign Out</a>
 {% else %}
-<a href=SIGNINPAGE>Sign In</a>
-<a href=SIGNUPPAGE>Sign Up</a>
+<a href="{% url 'login' %}">Sign In</a>
+<a href="{% url 'register' %}">Sign Up</a>
 {% endif %}
 </div>

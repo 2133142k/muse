@@ -1,44 +1,48 @@
 from django import forms
+from django.forms import formset_factory
 from django.contrib.auth.models import User
-from mus.models import MusicProject, UserProfile, Comment
+from django.contrib.auth.forms import UserCreationForm
+from museapp.models import MusicProject, UserProfile, Comment, ExtraFile
 
-
-
-class CommentForm(forms.modelForm):
-	text = models.CharField(widget=forms.Textarea,help_text="Comment")
-	date = models.DateTimeField(auto_now_add=true,blank=true)
-	audio = models.FileField()
+class CommentForm(forms.ModelForm):
+	text = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Comment", label = "Comment")
+	audio = forms.FileField(required = False, label = "Music file")
 
 	class Meta:
 		model=Comment
 		fields = ('text','audio')
 
-class ProjectForm(forms.modelForm):
-	MusicFile = models.FileField(help_text="Please input the file to upload.")
-	tab = models.FileField(help_text="Please input the file to upload.",required=False)
-	LyricAndChord = models.FileField(help_text="Please input the file to upload.",required=False)
-	ClassicalNotation = models.FileField(help_text="Please input the file to upload.",required=False)
-	PageDescription = models.CharField(max_length=500,help_text="Please enter the description for the project")
-	date = models.DateTimeField(auto_now_add=true,blank=true)
-	genre = models.CharField(max_length=128,help_text="Please input the genre.")
-	name = models.CharField(max_length=128, help_text="Please input naem of the project.",unique=True)
+class ProjectForm(forms.ModelForm):
+        name = forms.CharField(max_length=128, help_text="Please input name of the project.", label = "Project name")
+        genre = forms.CharField(max_length=128,help_text="Please input the genre.", label = "Genre")
+        PageDescription = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Please enter the description for the project", label = "Page description")
+	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False, label = "Music file")	
 
 	class Meta:
-		model = Project
-		fields =('MusicFile','tab','PageDescription','LyrinAndChoed','ClassicalNotation','PageDescription','genre','name')
+		model = MusicProject
+		fields =('name','genre','PageDescription','MusicFile')
 
-class UserForm(forms.modelForm):
-	username = forms.Charfield(max_length=128,help_text="Please enter your username.")
-	email = forms.EmaiField()
-	password = forms.CharField(widget=forms.passwordInput(),help_text="Please enter a password.")
-	name = forms.CharField(max_length=128,help_text="Please enter your name.")
+class UserForm(UserCreationForm):
+	email = forms.EmailField( label = "Email")
+	name = forms.CharField(max_length=128,help_text="Please enter your name.", label = "Name")
 
-	class Meta:
+	class Meta(UserCreationForm.Meta):
 		model = User
-		fields = ('username','password','email','name')
+		fields = UserCreationForm.Meta.fields + ('email','name')
 
 class UserProfileForm(forms.ModelForm):
-	picture = forms.ImageField(help_text-"Select a profile picture to upload.",required=False)
+	picture = forms.ImageField(help_text="Select a profile picture to upload.",required=False,)
 	class Meta:
 		model = UserProfile
-		field=['picture']
+		fields=['website', 'picture']
+
+class ExtraFileForm(forms.ModelForm):
+        file_type = forms.ChoiceField(choices = ExtraFile.FILE_TYPE_CHOICES, label = "Notation style")
+        extra = forms.FileField(help_text="Please input the file to upload.", required=False, label = "File")
+
+        class Meta:
+                model = ExtraFile
+                fields= ["file_type", "extra"]
+
+#Group of 3 ExtraFileForms
+ExtraFileFormSet = formset_factory(ExtraFileForm, extra = 3, max_num = 3, validate_max = True)
