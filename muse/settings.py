@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATICFILE_DIR = os.path.join(BASE_DIR, "static")
-MEDIAFILE_DIR = os.path.join(BASE_DIR, "media")
+MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 
 # Quick-start development settings - unsuitable for production
@@ -141,7 +141,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (STATICFILE_DIR,)
 
-MEDIA_ROOT = MEDIAFILE_DIR
+MEDIA_ROOT = MEDIA_DIR
 
 MEDIA_URL = '/media/'
 

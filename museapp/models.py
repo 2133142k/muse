@@ -20,7 +20,7 @@ class UserProfile(models.Model):
 		return self.user.username
 
 class MusicProject(models.Model):
-	musicFile = models.FileField()
+	musicFile = models.FileField(upload_to='media/')
 	PageDescription = models.CharField(max_length=500)
 	date = models.DateTimeField(auto_now_add=True)
 	genre = models.CharField(max_length=128)
@@ -43,7 +43,7 @@ class Comment(models.Model):
 	user = models.ForeignKey(User)
 	project = models.ForeignKey(MusicProject)
 	date = models.DateTimeField(auto_now_add=True)
-	audio = models.FileField()
+	audio = models.FileField(upload_to='media/')
 
 	def __str__(self):
 		return "comment on "+ self.project.name +" by " + str(self.user.username)

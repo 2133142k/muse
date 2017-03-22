@@ -16,19 +16,27 @@ class ProjectForm(forms.ModelForm):
         name = forms.CharField(max_length=128, help_text="Please input name of the project.", label = "Project name")
         genre = forms.CharField(max_length=128,help_text="Please input the genre.", label = "Genre")
         PageDescription = forms.CharField(max_length=500,widget=forms.Textarea,help_text="Please enter the description for the project", label = "Page description")
-	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False, label = "Music file")	
+	MusicFile = forms.FileField(help_text="Please input the file to upload.", required=False, label = "Music file")
 
 	class Meta:
 		model = MusicProject
 		fields =('name','genre','PageDescription','MusicFile')
 
 class UserForm(UserCreationForm):
-	email = forms.EmailField( label = "Email")
-	name = forms.CharField(max_length=128,help_text="Please enter your name.", label = "Name")
+    email = forms.EmailField( label = "Email")
+    name = forms.CharField(max_length=128,help_text="Please enter your name.", label = "Name")
 
-	class Meta(UserCreationForm.Meta):
-		model = User
-		fields = UserCreationForm.Meta.fields + ('email','name')
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields + ('email','name')
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError("Email already used")
+        return data
+
+
 
 class UserProfileForm(forms.ModelForm):
 	picture = forms.ImageField(help_text="Select a profile picture to upload.",required=False,)

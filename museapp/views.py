@@ -154,7 +154,7 @@ def project(request, project_name_slug):
 
     else:
         #not a valid request
-        return render ( request, "muse/givemessage.html", {"message":"Found no projects"})
+        return render ( request, "muse/message.html", {"message":"Found no projects"})
 
 @login_required
 def createProject(request):
@@ -164,7 +164,7 @@ def createProject(request):
         extra_form = ExtraFileFormSet(request.POST, request.FILES, prefix="extra_files")
         if form.is_valid() and extra_form.is_valid():
             project = form.save(commit=False)
-            project.musicFile = request.FILES["project-MusicFile"]
+            #project.musicFile = request.FILES["MusicFile"]
             project.user = request.user
             project.save()
 
