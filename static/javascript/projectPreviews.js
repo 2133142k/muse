@@ -180,7 +180,7 @@ function deleteProject(projectSlug){
 
 //functionChangeLoggedIn
 
-function getStartingProjectPreviews(){
+function getProjectPreviews(){
 	//change to request from server
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function(){
@@ -212,9 +212,22 @@ function getStartingProjectPreviews(){
 	xhttp.send();
 }
 
+function reloadProjectPreviews(){
+	
+	var projectPreviewsBlock = document.getElementById("projectPreviews");
+	
+	//clear current previews
+	while (projectPreviewsBlock.firstChild){
+		projectPreviewsBlock.removeChild(projectPreviewsBlock.firstChild);
+	}
+	
+	//load new previews
+	getProjectPreviews();
+}
+
 function onPageLoad(isLoggedIn, username, projectAuthor){
 	
-	getStartingProjectPreviews();
+	getProjectPreviews();
 	}
 	
 window.onload = onPageLoad(); 
