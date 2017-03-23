@@ -6,7 +6,7 @@
 	<li><p class="projectDescriptor">{{genre}}</p></li>
 	<li><p class="projectDescriptor">Comments - {{NumberOfComments}}</p></li>
 	<li><p class="projectDescriptor">{{PageDescription}}</p></li>
-	{% if SignedIn %}
+	{% if user.is_authenticated %}
 		<a class="projectDescriptor" href="{% url 'projectPage' project_name_slug=slug%}" >View</a>
 		{% if ProjectAuthor.id == request.user.id %}
 			<button type="button" onclick="editProject({{ProjectId}})">
