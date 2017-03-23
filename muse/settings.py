@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
-STATICFILE_DIR = os.path.join(BASE_DIR, "assets")
+STATICFILE_DIR = os.path.join(BASE_DIR, "static")
 MEDIAFILE_DIR = os.path.join(BASE_DIR, "media")
 
 
@@ -26,9 +26,9 @@ MEDIAFILE_DIR = os.path.join(BASE_DIR, "media")
 SECRET_KEY = 'nc7i_(g@7=p-)t3e6lg)(lf=-7!8wlt0ifg2dxn-_miy#thijg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [u'kuzlek.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -145,4 +145,4 @@ MEDIA_ROOT = MEDIAFILE_DIR
 
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
