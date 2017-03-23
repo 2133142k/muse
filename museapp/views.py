@@ -164,7 +164,10 @@ def createProject(request):
         extra_form = ExtraFileFormSet(request.POST, request.FILES, prefix="extra_files")
         if form.is_valid() and extra_form.is_valid():
             project = form.save(commit=False)
-            project.musicFile = request.FILES["project-MusicFile"]
+            try:
+                project.musicFile = request.FILES["project-MusicFile"]
+            except:
+                pass
             project.user = request.user
             project.save()
 
@@ -248,6 +251,10 @@ def newComment(request, project_name_slug):
 
         if form.is_valid():
             comment = form.save(commit=False)
+            try:
+                comment.audio = request.FILES['audio']
+            except:
+                pass
             comment.user = author
             comment.project = project
             comment.save()
