@@ -9,9 +9,9 @@
 	{% if user.is_authenticated %}
 	<li><a href="{% url 'userPage' user_id=user.id %}"> {{user.username}}'s Page</a></li>
 	<li><a href="{% url 'logout' %}">Sign Out</a></li>
-	<li><button type="button" onclick="newProject()">
+	<li><a href="{% url 'newProject' %}">
 		Create New Project
-	</button></li>
+	</a></li>
 	<li><a href="{% url 'changePassword' %}">Change Password</a></li>
 	<li><form id="delete_user_form" method="post" action="{% url 'deleteUser' %}" enctype="multipart/form-data">
 	{% csrf_token %}
